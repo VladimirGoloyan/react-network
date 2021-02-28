@@ -12,6 +12,7 @@ export default class Posts extends Component {
     start: 0,
     limit: 3,
     hasMore:true,
+    loading:false,
   };
 
   render() {
@@ -20,18 +21,20 @@ export default class Posts extends Component {
         <div className="app-posts__buttons">
           <Button onClick={() => this.createPost()}>Create Post</Button>
           <Button onClick={() => this.updatePost()}>Update Post</Button>
-          <Button onClick={() => this.deletePost(1)}>Delete Post</Button>
         </div>
+        {this.state.posts ? 
         <div className="app-posts">
           {this.state.posts.map((el) => {
             return (
               <div className="app-posts__container">
-                <Post key={el.id} post={el} className="app-posts__post" />
+                <Post key={el.id} post={el} className="app-posts__post" onClick={()=>this.deletePost(el.id)} />
               </div>
             );
           })}
           {this.state.hasMore && <Button onClick={() => this.getMore()}>Get More Posts</Button>}
         </div>
+        : <div>Loading</div>
+  }
       </>
     );
   }
@@ -103,4 +106,6 @@ export default class Posts extends Component {
       });
     });
   };
+
+  
 }
