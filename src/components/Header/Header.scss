@@ -10,4 +10,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &__nav-list{
+    display: flex;
+
+    &__item{
+      padding: 8px;
+      border: 1px solid black;
+      margin: 8px;
+
+      &__link{
+          text-decoration: none;
+          color: black;
+      }
+    }
+  }
 }
