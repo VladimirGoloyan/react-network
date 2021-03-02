@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-
 import service from "../../api/service";
+
 import Button from "../../components/Button/Button";
 import Post from "../../components/Post/Post";
 
@@ -11,8 +11,7 @@ export default class Posts extends Component {
     posts: [],
     start: 0,
     limit: 3,
-    hasMore:true,
-    loading:false,
+    hasMore: true,
   };
 
   render() {
@@ -22,19 +21,31 @@ export default class Posts extends Component {
           <Button onClick={() => this.createPost()}>Create Post</Button>
           <Button onClick={() => this.updatePost()}>Update Post</Button>
         </div>
-        {this.state.posts ? 
-        <div className="app-posts">
-          {this.state.posts.map((el) => {
-            return (
-              <div className="app-posts__container">
-                <Post key={el.id} post={el} className="app-posts__post" onClick={()=>this.deletePost(el.id)} />
+        {this.state.posts ? (
+          <div className="app-posts">
+            {this.state.posts.map((el,idx) => {
+              return (
+               
+                  <div key={idx} className="app-posts__container">
+                    <Post key={el.id} post={el} className="app-posts__post" isLink />
+                    <div className="app-posts__delete">
+                      <Button onClick={() => this.deletePost(el.id)}>
+                        Delete
+                      </Button>
+                    </div>
+                  </div>
+             
+              );
+            })}
+            {this.state.hasMore && (
+              <div className="app-posts__get-more">
+                <Button onClick={() => this.getMore()}>Get More Posts</Button>
               </div>
-            );
-          })}
-          {this.state.hasMore && <Button onClick={() => this.getMore()}>Get More Posts</Button>}
-        </div>
-        : <div>Loading</div>
-  }
+            )}
+          </div>
+        ) : (
+          <div>Loading</div>
+        )}
       </>
     );
   }
@@ -102,10 +113,8 @@ export default class Posts extends Component {
     service.getPosts(newStart, this.state.limit).then((data) => {
       this.setState({
         posts: [...this.state.posts, ...data],
-        hasMore: data.length < this.state.limit?false:true,
+        hasMore: data.length < this.state.limit ? false : true,
       });
     });
   };
-
-  
 }

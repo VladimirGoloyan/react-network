@@ -1,22 +1,39 @@
 import React from "react";
-import { Link } from "react-router-dom";
+
+import NavLink from "../NavLink/NavLink"
 
 import "./Header.scss";
+const routerLinks = [
+  {
+    title: "Homepage",
+    to: "/",
+  },
+  {
+    title: "Posts",
+    to: "/posts",
+  },
+  {
+    title: "Todos",
+    to: "/todos",
+  },
+  {
+    title: "Auth",
+    to: "/auth",
+  },
+];
 
 const Header = () => {
   return (
     <div className="app-header">
       <nav>
         <ul className="app-header__nav-list">
-          <li className="app-header__nav-list__item">
-            <Link className="app-header__nav-list__item__link" to="/">Homepage</Link>
-          </li>
-          <li className="app-header__nav-list__item">
-            <Link className="app-header__nav-list__item__link" to="/posts">Posts</Link>
-          </li>
-          <li className="app-header__nav-list__item">
-            <Link className="app-header__nav-list__item__link" to="/todos">Todos</Link>
-          </li>
+          {routerLinks.map((el,idx) => (
+            <li key={idx} className="app-header__nav-list__item">
+              <NavLink className="app-header__nav-list__item__link" to={el.to}>
+                {el.title}
+              </NavLink>
+            </li>
+          ))}
         </ul>
       </nav>
     </div>
