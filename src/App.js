@@ -6,6 +6,7 @@ import Header from "./components/Header/Header";
 import Layout from "./components/Layout/Layout";
 
 
+
 export class App extends Component {
   render() {
     return (
@@ -13,7 +14,7 @@ export class App extends Component {
         <BrowserRouter>
           <Header />
           <Layout>
-            <AppRoutes/>
+            <AppRoutes />
           </Layout>
         </BrowserRouter>
       </div>

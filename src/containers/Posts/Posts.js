@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import service from "../../api/service";
+import fbservice from "../../api/fbService";
 
 import Button from "../../components/Button/Button";
 import Post from "../../components/Post/Post";
@@ -17,31 +17,34 @@ export default class Posts extends Component {
   render() {
     return (
       <>
-        <div className="app-posts__buttons">
+        {/* <div className="app-posts__buttons">
           <Button onClick={() => this.createPost()}>Create Post</Button>
           <Button onClick={() => this.updatePost()}>Update Post</Button>
-        </div>
+        </div> */}
         {this.state.posts ? (
           <div className="app-posts">
-            {this.state.posts.map((el,idx) => {
+            {this.state.posts.map((el, idx) => {
               return (
-               
-                  <div key={idx} className="app-posts__container">
-                    <Post key={el.id} post={el} className="app-posts__post" isLink />
-                    <div className="app-posts__delete">
-                      <Button onClick={() => this.deletePost(el.id)}>
-                        Delete
-                      </Button>
-                    </div>
+                <div key={idx} className="app-posts__container">
+                  <Post
+                    key={el.id}
+                    post={el}
+                    className="app-posts__post"
+                    isLink
+                  />
+                  <div className="app-posts__delete">
+                    <Button onClick={() => this.deletePost(el.id)}>
+                      Delete
+                    </Button>
                   </div>
-             
+                </div>
               );
             })}
-            {this.state.hasMore && (
+            {/* {this.state.hasMore && (
               <div className="app-posts__get-more">
                 <Button onClick={() => this.getMore()}>Get More Posts</Button>
               </div>
-            )}
+            )} */}
           </div>
         ) : (
           <div>Loading</div>
@@ -51,8 +54,21 @@ export default class Posts extends Component {
   }
 
   componentDidMount() {
-    service
-      .getPosts(this.state.start, this.state.limit)
+    //fbservice.pushPosts();
+
+    // fbservice
+    //   .getAllPosts()
+    //   .then((data) => {
+    //     this.setState({
+    //       posts: data,
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.log("Caught an error : ", err);
+    //   });
+
+    fbservice
+      .getAllPosts()
       .then((data) => {
         this.setState({
           posts: data,
@@ -64,7 +80,7 @@ export default class Posts extends Component {
   }
 
   createPost = () => {
-    service
+    fbservice
       .createPost({
         title: "some title",
         body: "some body",
@@ -78,7 +94,7 @@ export default class Posts extends Component {
   };
 
   updatePost = () => {
-    service.updatePost(1, { title: "another title" }).then((data) => {
+    fbservice.updatePost(1, { title: "another title" }).then((data) => {
       const newPosts = this.state.posts.map((el) => {
         if (el.id == data.id) {
           return data;
@@ -92,7 +108,7 @@ export default class Posts extends Component {
   };
 
   deletePost = (id) => {
-    service
+    fbservice
       .deletePost(id)
       .then((data) => {
         this.setState({
@@ -110,7 +126,7 @@ export default class Posts extends Component {
     this.setState({
       start: newStart,
     });
-    service.getPosts(newStart, this.state.limit).then((data) => {
+    fbservice.getPosts(newStart, this.state.limit).then((data) => {
       this.setState({
         posts: [...this.state.posts, ...data],
         hasMore: data.length < this.state.limit ? false : true,
