@@ -11,6 +11,7 @@ const Auth = () => {
   const toggleView = () => {
     setAuthView(!authView);
   };
+
   return (
     <div className="app-auth-container">
       {authView ? <Login /> : <Signup />}

@@ -1,29 +1,15 @@
 import firebase from "firebase/app";
 import "firebase/database";
+import "firebase/auth";
 import firebaseConfig from "./firebaseConfig";
 
 import postsMockup from "../data-mockup/posts-mockup";
-import { PostAddRounded } from "@material-ui/icons";
 
 class fbService {
   constructor() {
     this.baseUrl = "https://react-project-d7762-default-rtdb.firebaseio.com";
     if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
   }
-
-  _request = (method = "GET", url, data = null) => {
-    return fetch(`${this.baseUrl}${url}.json`, {
-      method,
-      headers: data ? { "Content-Type": "application/json" } : {},
-      body: data ? JSON.stringify(data) : null,
-    }).then((res) => {
-      if (res.status >= 400) {
-        const error = new Error("Error status :", res.status);
-        throw error;
-      }
-      return res.json();
-    });
-  };
 
   pushPosts() {
     firebase.database().ref("/posts").set(postsMockup);
@@ -70,9 +56,6 @@ class fbService {
         })
       );
   };
-  getPost = (id) => {
-    return this._request("GET", `/posts/${id}`);
-  };
 
   createPost = async (postData) => {
     const res = await firebase
@@ -96,7 +79,24 @@ class fbService {
       .set(newItem);
     return newItem;
   };
-}
 
+  resToUser = (res) => {
+    const { uid, email, displayName, photoURL } = res.user;
+    return { uid, email, displayName, photoURL }; 
+  }
+
+  login = async (credentials) => {
+    const res = await firebase
+      .auth()
+      .signInWithEmailAndPassword(credentials.email, credentials.password);
+    return this.resToUser(res)
+  }
+  signup = async (credentials) => {
+    const res = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(credentials.email, credentials.password);
+      return this.resToUser(res)
+  };
+}
 const fbservice = new fbService();
 export default fbservice;
