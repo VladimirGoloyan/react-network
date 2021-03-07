@@ -7,14 +7,34 @@ import Button from "@material-ui/core/Button";
 
 import "./Post.scss";
 
-const Post = ({ post, className = "", onClick, isLink = false , edit = () => {} }) => {
+const Post = ({
+  post,
+  children,
+  className = "",
+  onClick,
+  isLink = false,
+  edit = () => {},
+  remove = () => {},
+}) => {
+  const removeHandler = (e) => {
+    e.preventDefault();
+    remove();
+  };
+
   const Wrapper = ({ children }) => {
     return isLink ? (
-      <Link to={`posts/${post.id}`}>{children}</Link>
-    ) : (
-      <div>
+      <Link to={`posts/${post.id}`}>
+        <div className={`app-post ${className}`}>
         {children}
-        <Button  variant='contained' color="primary" onClick={edit}>
+          <Button variant="contained" color="primary" onClick={removeHandler}>
+            Delete
+          </Button>
+        </div>
+      </Link>
+    ) : (
+      <div className={`app-post ${className}`}>
+        {children}
+        <Button variant="contained" color="primary" onClick={edit}>
           <EditIcon />
           <span>Edit</span>
         </Button>
@@ -27,7 +47,7 @@ const Post = ({ post, className = "", onClick, isLink = false , edit = () => {} 
       <div className={`app-post ${className}`}>
         <span className="app-post__title">{post.title}</span>
         <span className="app-post__body">{post.body}</span>
-      </div>
+        </div>
     </Wrapper>
   );
 };
@@ -39,7 +59,7 @@ Post.propTypes = {
     id: PropTypes.number,
     userId: PropTypes.number,
     isLink: PropTypes.bool,
-    edit: PropTypes.func
+    edit: PropTypes.func,
   }),
   className: PropTypes.string,
 };

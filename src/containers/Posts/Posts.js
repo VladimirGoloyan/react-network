@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import fbservice from "../../api/fbService";
 
-import Button from "../../components/Button/Button";
+import Button from "@material-ui/core/button";
 import Post from "../../components/Post/Post";
 
 import "./Posts.scss";
@@ -10,17 +10,17 @@ export default class Posts extends Component {
   state = {
     posts: [],
     start: 0,
-    limit: 3,
+    limit: 4,
     hasMore: true,
   };
 
   render() {
     return (
       <>
-        {/* <div className="app-posts__buttons">
+        <div className="app-posts__buttons">
           <Button onClick={() => this.createPost()}>Create Post</Button>
-          <Button onClick={() => this.updatePost()}>Update Post</Button>
-        </div> */}
+          <Button onClick={() => this.pushPosts()}>Reset original posts</Button>
+        </div>
         {this.state.posts ? (
           <div className="app-posts">
             {this.state.posts.map((el, idx) => {
@@ -31,20 +31,17 @@ export default class Posts extends Component {
                     post={el}
                     className="app-posts__post"
                     isLink
-                  />
-                  <div className="app-posts__delete">
-                    <Button onClick={() => this.deletePost(el.id)}>
-                      Delete
-                    </Button>
-                  </div>
+                    remove={() => this.deletePost(el.id)}
+                    />
+                    {'--'+el.id+'--'}
                 </div>
               );
             })}
-            {/* {this.state.hasMore && (
+            {this.state.hasMore && (
               <div className="app-posts__get-more">
                 <Button onClick={() => this.getMore()}>Get More Posts</Button>
               </div>
-            )} */}
+            )}
           </div>
         ) : (
           <div>Loading</div>
@@ -54,21 +51,8 @@ export default class Posts extends Component {
   }
 
   componentDidMount() {
-    //fbservice.pushPosts();
-
-    // fbservice
-    //   .getAllPosts()
-    //   .then((data) => {
-    //     this.setState({
-    //       posts: data,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log("Caught an error : ", err);
-    //   });
-
     fbservice
-      .getAllPosts()
+      .getPosts(this.state.start, this.state.limit)
       .then((data) => {
         this.setState({
           posts: data,
@@ -79,6 +63,10 @@ export default class Posts extends Component {
       });
   }
 
+  pushPosts = () => {
+    fbservice.pushPosts()
+  }
+
   createPost = () => {
     fbservice
       .createPost({
@@ -86,7 +74,7 @@ export default class Posts extends Component {
         body: "some body",
         userId: 1,
       })
-      .then((data) => {
+      .then(data => {
         this.setState({
           posts: [...this.state.posts, data],
         });
@@ -110,7 +98,7 @@ export default class Posts extends Component {
   deletePost = (id) => {
     fbservice
       .deletePost(id)
-      .then((data) => {
+      .then(() => {
         this.setState({
           posts: this.state.posts.filter((el) => {
             return el.id != id;
@@ -121,16 +109,22 @@ export default class Posts extends Component {
         console.log(err);
       });
   };
+
+  
   getMore = () => {
-    const newStart = this.state.start + this.state.limit;
+    const {start, limit, posts} = this.state
+    const newStart = start + limit + 1;
     this.setState({
       start: newStart,
-    });
-    fbservice.getPosts(newStart, this.state.limit).then((data) => {
+    })
+    
+    fbservice.getPosts(start, start + limit)
+    .then((data) => {
       this.setState({
-        posts: [...this.state.posts, ...data],
-        hasMore: data.length < this.state.limit ? false : true,
+        posts: [...posts, ...data],
+        hasMore: data.length < limit ? false : true,
       });
-    });
+    })
+  
   };
 }

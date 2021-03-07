@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import fbservice from "../../api/fbService";
+import fbService from "../../api/fbService";
 
 import Post from "../Post/Post";
 import Modal from "@material-ui/core/Modal";
@@ -19,7 +19,7 @@ export default class PostDetails extends Component {
   }
 
   componentDidMount() {
-    fbservice
+    fbService
       .getPost(this.props.match.params.postId)
       .then((data) => {
         this.setState({
@@ -41,12 +41,10 @@ export default class PostDetails extends Component {
   };
 
   saveEditedPost = () => {
-    fbservice
-      .updatePost(this.state.post.id, {
-        ...this.state.post,
+    fbService
+      .updatePost({...this.state.post,
         title: this.state.titleValue,
-        body: this.state.bodyValue,
-      })
+        body: this.state.bodyValue})
       .then((res) => {
         this.setState({
           post: {

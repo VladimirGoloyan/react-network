@@ -3,11 +3,12 @@ import "firebase/database";
 import firebaseConfig from "./firebaseConfig";
 
 import postsMockup from "../data-mockup/posts-mockup";
+import { PostAddRounded } from "@material-ui/icons";
 
 class fbService {
   constructor() {
     this.baseUrl = "https://react-project-d7762-default-rtdb.firebaseio.com";
-    firebase.initializeApp(firebaseConfig);
+    if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
   }
 
   _request = (method = "GET", url, data = null) => {
@@ -25,48 +26,75 @@ class fbService {
   };
 
   pushPosts() {
-    fetch(
-      "https://react-project-d7762-default-rtdb.firebaseio.com/posts.json",
-      {
-        method: "PUT",
-        body: JSON.stringify(
-          postsMockup.map((el) => ({ ...el, id: el.id - 1 }))
-        ),
-      }
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res);
-      });
+    firebase.database().ref("/posts").set(postsMockup);
   }
 
   getAllPosts = async () => {
     const allPosts = await firebase.database().ref("/posts").get();
-    return allPosts.val();
-    //return this._request("GET", "/posts");
+    const data = allPosts.toJSON();
+    return Object.values(data);
   };
-  getPosts = (start, limit) => {
-    return this._request("GET", `/posts?_start=${start}&_limit=${limit}`);
+  getPosts = async (startAt = 0, endAt = 4) => {
+    const res = await firebase
+      .database()
+      .ref("posts")
+      .orderByKey()
+      .startAt(startAt.toString())
+      .endAt(endAt.toString())
+      .get();
+    const data = res.toJSON();
+    return Object.values(data);
   };
 
-  getAllPosts = () => {
-    return this._request("GET", "/posts");
+  updatePost = async (postData) => {
+    const postRef = firebase.database().ref(`posts/${postData.id}`);
+    await postRef.update(postData);
+    console.log(postData);
+    const res = await postRef.get();
+    return res.val();
   };
+  deletePost = async (id) => {
+    const postRef = firebase.database().ref(`posts/${id}`);
+    await postRef.remove();
 
+    const posts = await this.getAllPosts();
+    firebase
+      .database()
+      .ref("posts")
+      .set(
+        posts.map((el, idx) => {
+          return {
+            ...el,
+            id: idx,
+          };
+        })
+      );
+  };
   getPost = (id) => {
     return this._request("GET", `/posts/${id}`);
   };
 
-  createPost = (data) => {
-    return this._request("POST", "/posts", data);
-  };
+  createPost = async (postData) => {
+    const res = await firebase
+      .database()
+      .ref("posts")
+      .orderByKey()
+      .limitToLast(1)
+      .get();
+    const lastItemJson = res.toJSON();
+    const lastItem = Object.values(lastItemJson)[0];
+    const { id } = lastItem;
 
-  updatePost = (id, data) => {
-    return this._request("PATCH", `/posts/${id}`, data);
-  };
+    const newItem = {
+      ...postData,
+      id: id + 1,
+    };
 
-  deletePost = (id) => {
-    return this._request("DELETE", `/posts/${id}`);
+    await firebase
+      .database()
+      .ref(`posts/${id + 1}`)
+      .set(newItem);
+    return newItem;
   };
 }
 
