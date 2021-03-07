@@ -14,6 +14,8 @@ export default class Posts extends Component {
     hasMore: true,
   };
 
+ 
+
   render() {
     return (
       <>

@@ -7,6 +7,7 @@ import Todos from "../../containers/Todos/Todos";
 import Auth from "../../containers/Auth/Auth";
 import PostDetails from "../PostDetails/PostDetails";
 import Page404 from "../Page404/Page404";
+import Profile from "../Profile/Profile";
 
 const AppRoutes = () => {
   return (
@@ -16,6 +17,7 @@ const AppRoutes = () => {
         <Route exact path="/posts/:postId" component={PostDetails} />
         <Route exact path="/todos" component={Todos} />
         <Route exact path="/auth" component={Auth} />
+        <Route exact path="/profile" component={Profile} />
         <Route exact path="/" component={Homepage} />
         <Route path="*" component={Page404} />
       </Switch>

@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 
 import Login from "./Login/Login";
 import Signup from "./Signup/Signup";
 
 import "./Auth.scss";
+import { AppContext } from "../../App";
 
 const Auth = () => {
+  const context = useContext(AppContext);
+  console.log(context)
   const [authView, setAuthView] = useState(true);
 
   const toggleView = () => {
