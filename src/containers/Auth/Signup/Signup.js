@@ -1,16 +1,15 @@
 import React, { useState, useContext } from "react";
 import fbservice from "../../../api/fbService";
+//import { AppContext } from '../../../context/AppContext'
 
-import { AppContext } from "../../../App";
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import Button from "@material-ui/core/Button";
 import Input from "../../../components/Input/Input";
 
 import "./Signup.scss";
-import { toast } from "react-toastify";
 
 const Signup = () => {
-  const context = useContext(AppContext)
+  //const context = useContext(AppContext)
   const [loading, setLoading] = useState(false)
   const [credentials, setCredentials] = useState({
     email: "",
@@ -39,7 +38,7 @@ const Signup = () => {
     try {
       setLoading(true);
       const userData = await fbservice.signup(credentials);
-      context.setUser(userData)
+     // context.setUser(userData)
     } catch (err) {
       if(err.message[0] == "P"){
         setErrorState({

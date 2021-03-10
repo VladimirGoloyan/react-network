@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import Link from "../Link/Link";
 import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
-import {AppContext} from '../../App.js'
+import {AppContext} from '../../context/AppContext'
 
 import "./Post.scss";
 
