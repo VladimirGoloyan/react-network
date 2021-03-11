@@ -1,9 +1,7 @@
 import {createContext} from 'react'
 
-const initialState = {
-    user: null,
-    setUser: () => {},
+export const initialState = {
+    user: JSON.parse(localStorage.getItem('user')) || null,
 }
 
-const appContext = createContext(initialState);
-export default appContext;
+export const AppContext = createContext(initialState);

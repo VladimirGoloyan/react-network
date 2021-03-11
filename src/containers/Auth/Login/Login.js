@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import {useHistory} from 'react-router-dom'
 import fbservice from "../../../api/fbService";
+import storeService from "../../../api/storageService";
+import { AppContext } from "../../../context/AppContext";
 
 import Button from "@material-ui/core/Button";
 import Input from "../../../components/Input/Input";
@@ -12,6 +15,9 @@ const Login = () => {
     password: "",
   });
 
+  const context = useContext(AppContext);
+  const history = useHistory();
+
   const changeCredentials = (name, value) => {
     setCredentials({
       ...credentials,
@@ -20,8 +26,15 @@ const Login = () => {
   };
 
   const handleLogin = async () => {
-    const userData = await fbservice.login(credentials)
-  }
+    try {
+      const user = await fbservice.login(credentials);
+      context.dispatch({ type: "SET_USER", payload: { user } });
+      storeService.setData("user",user,'local')
+      history.replace('/profile')
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   return (
     <div className="app-auth-login">
@@ -31,6 +44,7 @@ const Login = () => {
         onChange={(e) => changeCredentials("email", e.target.value)}
       />
       <Input
+        type="password"
         value={credentials.password}
         placeholder="Enter password"
         onChange={(e) => changeCredentials("password", e.target.value)}

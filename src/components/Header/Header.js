@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-//import { AppContext } from "../../context/AppContext";
+import { AppContext } from "../../context/AppContext";
 
 import NavLink from "../NavLink/NavLink";
 
@@ -20,7 +20,7 @@ const routerLinks = [
 ];
 
 const Header = () => {
- // const context = useContext(AppContext);
+  const context = useContext(AppContext);
   return (
     <div className="app-header">
       <nav>
@@ -32,7 +32,7 @@ const Header = () => {
               </NavLink>
             </li>
           ))}
-      {/* {!context.user ? (
+      {!context.state.user ? (
         <li className="app-header__nav-list__item">
           <NavLink className="app-header__nav-list__item__link" to={"/auth"}>
             Auth
@@ -44,7 +44,7 @@ const Header = () => {
             Profile
           </NavLink>
         </li>
-      )} */}
+      )}
       </ul>
     </nav>
     </div>

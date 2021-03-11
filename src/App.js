@@ -20,7 +20,7 @@ export class App extends Component {
               <AppRoutes />
             </Layout>
           </BrowserRouter>
-          </AppProvider>
+        </AppProvider>
         <ToastContainer
           position="bottom-right"
           className="app-toast-container"

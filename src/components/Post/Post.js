@@ -30,7 +30,7 @@ const Post = ({
       <Link to={`posts/${post.id}`}>
         <div className={`app-post ${className}`}>
         {children}
-        {context.user ? (
+        {context.state.user ? (
           <Button variant="contained" color="primary" onClick={removeHandler}>
             Delete
           </Button>

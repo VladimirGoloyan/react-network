@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 
 import "./Input.scss";
 
-const Input = ({loading, type='text', children, onChange, value, className='', placeholder='Enter text' }) => {
+const Input = ({name='',loading, type='text', children, onChange, value, className='', placeholder='Enter text' }) => {
   return (
     <input
+      name={name}
       disabled={loading}
       type={type}
       onChange={onChange}

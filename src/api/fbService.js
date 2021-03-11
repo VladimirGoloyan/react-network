@@ -20,6 +20,13 @@ class fbService {
     const data = allPosts.toJSON();
     return Object.values(data);
   };
+
+  getPost = async (id) => {
+    const res = await firebase.database().ref(`posts/${id}`).get();
+    console.log(res);
+    return res.toJSON();
+  };
+
   getPosts = async (startAt = 0, endAt = 4) => {
     const res = await firebase
       .database()
@@ -82,20 +89,22 @@ class fbService {
 
   resToUser = (res) => {
     const { uid, email, displayName, photoURL } = res.user;
-    return { uid, email, displayName, photoURL }; 
-  }
+    return { uid, email, displayName, photoURL };
+  };
 
   login = async (credentials) => {
     const res = await firebase
       .auth()
       .signInWithEmailAndPassword(credentials.email, credentials.password);
-    return this.resToUser(res)
-  }
+    return this.resToUser(res);
+  };
   signup = async (credentials) => {
     const res = await firebase
       .auth()
       .createUserWithEmailAndPassword(credentials.email, credentials.password);
-      return this.resToUser(res)
+    const user = firebase.auth().currentUser;
+    await user.updateProfile({ displayName: credentials.name });
+    return this.resToUser(res);
   };
 }
 const fbservice = new fbService();
