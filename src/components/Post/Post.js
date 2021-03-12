@@ -19,7 +19,6 @@ const Post = ({
 }) => {
   const context = useContext(AppContext)
 
-  console.log(context)
   const removeHandler = (e) => {
     e.preventDefault();
     remove();

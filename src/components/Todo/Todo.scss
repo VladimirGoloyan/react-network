@@ -1,0 +1,25 @@
+.todo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &__title {
+    margin: 8px;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+  }
+
+  &__done {
+    background-color: green !important;
+  }
+
+  &__not-done {
+    background-color: #800000 !important;
+  }
+}

@@ -1,0 +1,27 @@
+.app-todos {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 80%;
+    border: 1px solid black;
+    border-radius: px;
+    margin :16px;
+    }
+  }
+  &__get-more{
+      margin:8px;
+  }
+}

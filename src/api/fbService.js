@@ -4,6 +4,7 @@ import "firebase/auth";
 import firebaseConfig from "./firebaseConfig";
 
 import postsMockup from "../data-mockup/posts-mockup";
+import todosMockup from "../data-mockup/todos-mockup";
 
 class fbService {
   constructor() {
@@ -15,22 +16,26 @@ class fbService {
     firebase.database().ref("/posts").set(postsMockup);
   }
 
-  getAllPosts = async () => {
-    const allPosts = await firebase.database().ref("/posts").get();
+  pushTodos(){
+    firebase.database().ref("/todos").set(todosMockup);
+  }
+
+  getAllItems = async (path) => {
+    const allPosts = await firebase.database().ref(path).get();
     const data = allPosts.toJSON();
     return Object.values(data);
   };
 
-  getPost = async (id) => {
-    const res = await firebase.database().ref(`posts/${id}`).get();
+  getItem = async (id, path) => {
+    const res = await firebase.database().ref(`${path}/${id}`).get();
     console.log(res);
     return res.toJSON();
   };
 
-  getPosts = async (startAt = 0, endAt = 4) => {
+  getItems = async (startAt = 0, endAt = 4, path) => {
     const res = await firebase
       .database()
-      .ref("posts")
+      .ref(path)
       .orderByKey()
       .startAt(startAt.toString())
       .endAt(endAt.toString())
@@ -39,21 +44,21 @@ class fbService {
     return Object.values(data);
   };
 
-  updatePost = async (postData) => {
-    const postRef = firebase.database().ref(`posts/${postData.id}`);
+  updateItem = async (postData, path) => {
+    const postRef = firebase.database().ref(`${path}/${postData.id}`);
     await postRef.update(postData);
     console.log(postData);
     const res = await postRef.get();
     return res.val();
   };
-  deletePost = async (id) => {
-    const postRef = firebase.database().ref(`posts/${id}`);
-    await postRef.remove();
 
-    const posts = await this.getAllPosts();
+  deleteItem = async (id, path) => {
+    const postRef = firebase.database().ref(`${path}/${id}`);
+    await postRef.remove();
+    const posts = await this.getAllItems('posts');
     firebase
       .database()
-      .ref("posts")
+      .ref(path)
       .set(
         posts.map((el, idx) => {
           return {
@@ -64,22 +69,21 @@ class fbService {
       );
   };
 
-  createPost = async (postData) => {
+  createItem = async (postData,path) => {
     const res = await firebase
       .database()
-      .ref("posts")
+      .ref(path)
       .orderByKey()
       .limitToLast(1)
       .get();
     const lastItemJson = res.toJSON();
     const lastItem = Object.values(lastItemJson)[0];
     const { id } = lastItem;
-
+    console.log(id)
     const newItem = {
       ...postData,
       id: id + 1,
     };
-
     await firebase
       .database()
       .ref(`posts/${id + 1}`)

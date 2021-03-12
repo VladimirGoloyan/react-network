@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import "./Input.scss";
 
-const Input = ({name='',loading, type='text', children, onChange, value, className='', placeholder='Enter text' }) => {
+const Input = ({name='',loading, type='text', children, onChange, value, className='', placeholder='Enter text', checked = false}) => {
   return (
     <input
       name={name}
@@ -13,6 +13,7 @@ const Input = ({name='',loading, type='text', children, onChange, value, classNa
       value={value}
       className={(className, "app-input")}
       placeholder={placeholder}
+      checked = {checked}
     >
       {children}
     </input>
@@ -24,7 +25,8 @@ Input.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   className: PropTypes.string,
-  placeholder: PropTypes.string
+  placeholder: PropTypes.string,
+  checked : PropTypes.bool
 };
 
 export default Input;

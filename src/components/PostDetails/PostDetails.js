@@ -20,7 +20,7 @@ export default class PostDetails extends Component {
 
   componentDidMount() {
     fbService
-      .getPost(this.props.match.params.postId)
+      .getItem(this.props.match.params.postId,'posts')
       .then((data) => {
         this.setState({
           post: data,
@@ -42,9 +42,9 @@ export default class PostDetails extends Component {
 
   saveEditedPost = () => {
     fbService
-      .updatePost({...this.state.post,
+      .updateItem({...this.state.post,
         title: this.state.titleValue,
-        body: this.state.bodyValue})
+        body: this.state.bodyValue},'posts')
       .then((res) => {
         this.setState({
           post: {

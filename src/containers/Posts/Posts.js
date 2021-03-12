@@ -54,7 +54,7 @@ export default class Posts extends Component {
 
   componentDidMount() {
     fbservice
-      .getPosts(this.state.start, this.state.limit)
+      .getItems(this.state.start, this.state.limit,'posts')
       .then((data) => {
         this.setState({
           posts: data,
@@ -71,11 +71,11 @@ export default class Posts extends Component {
 
   createPost = () => {
     fbservice
-      .createPost({
+      .createItem({
         title: "some title",
         body: "some body",
         userId: 1,
-      })
+      }, 'posts')
       .then(data => {
         this.setState({
           posts: [...this.state.posts, data],
@@ -83,23 +83,9 @@ export default class Posts extends Component {
       });
   };
 
-  updatePost = () => {
-    fbservice.updatePost(1, { title: "another title" }).then((data) => {
-      const newPosts = this.state.posts.map((el) => {
-        if (el.id == data.id) {
-          return data;
-        }
-        return el;
-      });
-      this.setState({
-        posts: newPosts,
-      });
-    });
-  };
-
   deletePost = (id) => {
     fbservice
-      .deletePost(id)
+      .deleteItem(id,'posts')
       .then(() => {
         this.setState({
           posts: this.state.posts.filter((el) => {
@@ -120,7 +106,7 @@ export default class Posts extends Component {
       start: newStart,
     })
     
-    fbservice.getPosts(start, start + limit)
+    fbservice.getItems(start, start + limit,'posts')
     .then((data) => {
       this.setState({
         posts: [...posts, ...data],
