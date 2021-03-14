@@ -3,29 +3,43 @@ import fbservice from "../../api/fbService";
 
 import Button from "@material-ui/core/button";
 import Post from "../../components/Post/Post";
+import ItemModal from "../../components/ItemModal/ItemModal";
 
 import "./Posts.scss";
+import { actionTypes } from "../../context/actionTypes";
+import { AppContext } from "../../context/AppContext";
 
 export default class Posts extends Component {
   state = {
-    posts: [],
     start: 0,
     limit: 4,
     hasMore: true,
+    isCreateModalOpen: false,
+    titleValue: "",
+    bodyValue: "",
   };
 
- 
+  static contextType = AppContext;
 
   render() {
     return (
       <>
+        <ItemModal
+          action={this.createPost}
+          bodyValue={this.state.bodyValue}
+          titleValue={this.state.titleValue}
+          changeValue={this.changeValue}
+          isOpen={this.state.isCreateModalOpen}
+          onClose={this.toggleCreateModal}
+          buttonTitle="Create"
+        />
         <div className="app-posts__buttons">
-          <Button onClick={() => this.createPost()}>Create Post</Button>
+          <Button onClick={() => this.toggleCreateModal()}>Create Post</Button>
           <Button onClick={() => this.pushPosts()}>Reset original posts</Button>
         </div>
-        {this.state.posts ? (
+        {this.context.state.posts ? (
           <div className="app-posts">
-            {this.state.posts.map((el, idx) => {
+            {this.context.state.posts.map((el, idx) => {
               return (
                 <div key={idx} className="app-posts__container">
                   <Post
@@ -34,8 +48,8 @@ export default class Posts extends Component {
                     className="app-posts__post"
                     isLink
                     remove={() => this.deletePost(el.id)}
-                    />
-                    {'--'+el.id+'--'}
+                  />
+                  <span>{"--" + el.id + "--"}</span>
                 </div>
               );
             })}
@@ -53,39 +67,56 @@ export default class Posts extends Component {
   }
 
   componentDidMount() {
-    fbservice
-      .getItems(this.state.start, this.state.limit,'posts')
-      .then((data) => {
-        this.setState({
-          posts: data,
+    if (!this.context.state.posts) {
+      fbservice
+        .getItems(this.state.start, this.state.limit, "posts")
+        .then((data) => {
+          this.context.dispatch({
+            type: actionTypes.SET_POSTS,
+            payload: { posts: data },
+          });
+        })
+        .catch((err) => {
+          console.log("Caught an error : ", err);
         });
-      })
-      .catch((err) => {
-        console.log("Caught an error : ", err);
-      });
+    }
   }
+
+  toggleCreateModal = () => {
+    this.setState((prev) => ({
+      isCreateModalOpen: !prev.isCreateModalOpen,
+    }));
+  };
+
+  changeValue = (e) => {
+    this.setState({
+      ...this.state,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   pushPosts = () => {
-    fbservice.pushPosts()
-  }
+    fbservice.pushPosts();
+  };
 
   createPost = () => {
-    fbservice
-      .createItem({
-        title: "some title",
-        body: "some body",
-        userId: 1,
-      }, 'posts')
-      .then(data => {
-        this.setState({
-          posts: [...this.state.posts, data],
-        });
+    const newPost = {
+      title: this.state.titleValue,
+      body: this.state.bodyValue,
+      userId: 1,
+    };
+    fbservice.createItem(newPost, "posts").then(data => {
+      this.context.dispatch({
+        type: actionTypes.CREATE_POST,
+        payload: { post: data },
       });
+      this.toggleCreateModal();
+    });
   };
 
   deletePost = (id) => {
     fbservice
-      .deleteItem(id,'posts')
+      .deleteItem(id, "posts")
       .then(() => {
         this.setState({
           posts: this.state.posts.filter((el) => {
@@ -98,21 +129,20 @@ export default class Posts extends Component {
       });
   };
 
-  
   getMore = () => {
-    const {start, limit, posts} = this.state
+    const { start, limit } = this.state;
     const newStart = start + limit + 1;
     this.setState({
       start: newStart,
-    })
-    
-    fbservice.getItems(start, start + limit,'posts')
-    .then((data) => {
+    });
+    fbservice.getItems(start, start + limit, "posts").then((data) => {
+      this.context.dispatch({
+        type: actionTypes.GET_MORE_POSTS,
+        payload: { posts: data },
+      });
       this.setState({
-        posts: [...posts, ...data],
         hasMore: data.length < limit ? false : true,
       });
-    })
-  
+    });
   };
 }

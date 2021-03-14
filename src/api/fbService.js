@@ -28,7 +28,6 @@ class fbService {
 
   getItem = async (id, path) => {
     const res = await firebase.database().ref(`${path}/${id}`).get();
-    console.log(res);
     return res.toJSON();
   };
 

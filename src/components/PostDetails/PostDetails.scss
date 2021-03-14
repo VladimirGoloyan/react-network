@@ -3,26 +3,5 @@
   border: 1px solid black;
   border-radius: 16px;
   padding: 16px;
-  &__edit-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &__input{
-        width: 80%;
-        margin: 16px;
-        border-radius: 4px;
-    }
-
-    &__inner {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      width: 550px;
-      height: 350px;
-      background-color: #ccc;
-      color: white;
-    }
-  }
+  
 }

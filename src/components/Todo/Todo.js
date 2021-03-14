@@ -24,7 +24,7 @@ const Todo = ({ title, children, completed,remove,item}) => {
       <Button disabled={!context.state.user} variant="contained" className={complete ? "todo-container__done" : "todo-container__not-done"} onClick={toggleComplete}>
         {complete ? "Completed":"Not Completed" }
       </Button>
-      <Button onClick={()=>remove()}>Delete</Button>
+      <Button onClick={remove}>Delete</Button>
       </div>
     </div>
   );
