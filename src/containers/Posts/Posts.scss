@@ -1,20 +1,35 @@
+@import "../../styles/root";
+
 .app-posts {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
-  &__buttons {
-    width: 40%;
-    margin: 0 auto;
+  &__buttons-container {
+    margin: 8px;
     display: flex;
     justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+
+    &__item {
+      background-color: $primary-color !important;
+      color: $accent-color !important;
+    }
   }
   &__get-more {
     margin-top: 16px;
+
+    &__button{
+      background-color: $primary-color !important;
+      color: $accent-color !important;
+      margin-bottom: 8px !important;
+    }
   }
-  
+
   &__container {
+    background-color: $secondary-color;
     display: flex;
     justify-content: center;
     flex-direction: column;

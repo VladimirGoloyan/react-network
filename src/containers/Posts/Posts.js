@@ -33,9 +33,19 @@ export default class Posts extends Component {
           onClose={this.toggleCreateModal}
           buttonTitle="Create"
         />
-        <div className="app-posts__buttons">
-          <Button onClick={() => this.toggleCreateModal()}>Create Post</Button>
-          <Button onClick={() => this.pushPosts()}>Reset original posts</Button>
+        <div className="app-posts__buttons-container">
+          <Button
+            className="app-posts__buttons-container__item"
+            onClick={() => this.toggleCreateModal()}
+          >
+            Create Post
+          </Button>
+          <Button
+            className="app-posts__buttons-container__item"
+            onClick={() => this.pushPosts()}
+          >
+            Reset original posts
+          </Button>
         </div>
         {this.context.state.posts ? (
           <div className="app-posts">
@@ -55,7 +65,7 @@ export default class Posts extends Component {
             })}
             {this.state.hasMore && (
               <div className="app-posts__get-more">
-                <Button onClick={() => this.getMore()}>Get More Posts</Button>
+                <Button className='app-posts__get-more__button' onClick={() => this.getMore()}>Get More Posts</Button>
               </div>
             )}
           </div>
@@ -105,7 +115,7 @@ export default class Posts extends Component {
       body: this.state.bodyValue,
       userId: 1,
     };
-    fbservice.createItem(newPost, "posts").then(data => {
+    fbservice.createItem(newPost, "posts").then((data) => {
       this.context.dispatch({
         type: actionTypes.CREATE_POST,
         payload: { post: data },

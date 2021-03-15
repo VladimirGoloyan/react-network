@@ -23,30 +23,30 @@ const Header = () => {
   const context = useContext(AppContext);
   return (
     <div className="app-header">
-      <nav>
+      
         <ul className="app-header__nav-list">
           {routerLinks.map((el, idx) => (
             <li key={idx} className="app-header__nav-list__item">
-              <NavLink className="app-header__nav-list__item__link" to={el.to}>
+              <NavLink  to={el.to}>
                 {el.title}
               </NavLink>
             </li>
           ))}
       {!context.state.user ? (
         <li className="app-header__nav-list__item">
-          <NavLink className="app-header__nav-list__item__link" to={"/auth"}>
+          <NavLink  to={"/auth"}>
             Auth
           </NavLink>
         </li>
       ) : (
         <li className="app-header__nav-list__item">
-          <NavLink className="app-header__nav-list__item__link" to={"/profile"}>
+          <NavLink  to={"/profile"}>
             Profile
           </NavLink>
         </li>
       )}
       </ul>
-    </nav>
+    
     </div>
   );
 };

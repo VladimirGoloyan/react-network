@@ -1,27 +1,49 @@
+@import "../../styles/root";
+
 .app-todos {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
 
+  &__reset {
+    margin: 8px !important;
+    background-color: $primary-color !important;
+    color: $accent-color !important;
+  }
+
   &__container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    width: 70%;
 
     &__item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    width: 80%;
-    border: 1px solid black;
-    border-radius: px;
-    margin :16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      width: 80%;
+      background-color: $secondary-color;
+      border-radius: 5px;
+      margin: 16px;
     }
   }
-  &__get-more{
-      margin:8px;
+  &__get-more {
+    margin: 8px;
+  }
+
+  &__no-user {
+    color: $accent-color;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &__text{
+      margin-top: 30px;
+      font-size: 30px;
+    }
+
   }
 }

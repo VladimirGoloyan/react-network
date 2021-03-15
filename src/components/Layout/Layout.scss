@@ -1,9 +1,12 @@
+@import '../../styles/root';
+
 .app-layout {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100vh;
+    height: 100%;
     align-items: center;
+    //background-image: url('../../assets/background.jfif');
 
     &__main {
         width: 70%;

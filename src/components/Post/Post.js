@@ -30,7 +30,7 @@ const Post = ({
         <div className={`app-post ${className}`}>
         {children}
         {context.state.user ? (
-          <Button variant="contained" color="primary" onClick={removeHandler}>
+          <Button variant="outlined" className="app-post__delete" onClick={removeHandler}>
             Delete
           </Button>
         ): (
@@ -53,6 +53,7 @@ const Post = ({
     <Wrapper>
       <div className={`app-post ${className}`}>
         <span className="app-post__title">{post.title}</span>
+        <hr className='app-post__hr'/>
         <span className="app-post__body">{post.body}</span>
         </div>
     </Wrapper>

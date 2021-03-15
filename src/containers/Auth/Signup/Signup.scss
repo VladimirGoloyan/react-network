@@ -1,6 +1,18 @@
+@import '../../../styles/root';
+
 .app-auth-sign-up{
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background-color: $secondary-color;
+    border-radius: 5px;
+    margin-top:20%;
+    padding: 20px;
+
+    &__button{
+        background-color: $primary-color !important;
+        color: $accent-color !important;
+        margin: 8px !important
+    }
 }

@@ -49,7 +49,7 @@ const Login = () => {
         placeholder="Enter password"
         onChange={(e) => changeCredentials("password", e.target.value)}
       />
-      <Button variant="contained" color="primary" onClick={handleLogin}>
+      <Button variant="contained" className='app-auth-login__button'  onClick={handleLogin}>
         Login
       </Button>
     </div>

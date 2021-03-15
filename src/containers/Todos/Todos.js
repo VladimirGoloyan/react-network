@@ -1,7 +1,8 @@
 import { Button } from "@material-ui/core";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import fbService from "../../api/fbService";
 import Todo from "../../components/Todo/Todo";
+import { AppContext } from "../../context/AppContext";
 import todosMockup from "../../data-mockup/todos-mockup";
 
 import "./Todos.scss";
@@ -11,15 +12,18 @@ const Todos = () => {
   const [todos, setTodos] = useState([]);
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-
+  
+  const context = useContext(AppContext)
+  
   const pushTodos = () => {
     fbService.pushTodos();
   };
-
+  
   useEffect(() => {
+    {console.log(context)}
     fbService
-      .getItems(start, limit, "todos")
-      .then((data) => {
+    .getItems(start, limit, "todos")
+    .then((data) => {
         setTodos(data);
         
       })
@@ -33,10 +37,9 @@ const Todos = () => {
     setStart(newStart)
     const res = await fbService.getItems(start, start + limit, 'todos')
     setTodos(todos.concat(res))
-    console.log(res.length)
     res.length < limit ? setHasMore(false) : setHasMore(true)
   }
-
+  
   const deleteTodo = async (id) => {
     await fbService.deleteItem(id,'todos')
         setTodos(
@@ -47,11 +50,11 @@ const Todos = () => {
   }
 
   return (
+    <>
+    {context.state.user ? (
     <div className="app-todos">
-      Todos
-      <Button onClick={() => pushTodos()}>Reset original todos</Button>
+      <Button className='app-todos__reset' onClick={() => pushTodos()}>Reset original todos</Button>
       <div className="app-todos__container">
-        {console.log(todos)}
         {todos.map((el, idx) => {
           return (
             <div key={idx} className="app-todos__container__item">
@@ -73,6 +76,12 @@ const Todos = () => {
               </div>
             )}
     </div>
+    ) : (
+      <div className='app-todos__no-user'>
+       <span className='app-todos__no-user__text'> Sign in to explore to do lists</span>
+      </div>
+    )}
+    </>
   );
 };
 

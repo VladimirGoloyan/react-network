@@ -1,3 +1,4 @@
+@import '../../styles/root';
 .todo-container {
   display: flex;
   justify-content: center;
@@ -5,7 +6,9 @@
   flex-direction: column;
 
   &__title {
-    margin: 8px;
+    margin: 16px;
+    font-size: 20px;
+    color:$accent-color
   }
 
   &__buttons {
@@ -16,10 +19,12 @@
   }
 
   &__done {
-    background-color: green !important;
+    background-color: $complete-color !important;
+    color: $accent-color !important;
   }
-
+  
   &__not-done {
-    background-color: #800000 !important;
+    background-color: $incomplete-color !important;
+    color: $accent-color !important;
   }
 }

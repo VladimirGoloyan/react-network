@@ -1,3 +1,5 @@
+@import '../../styles/root';
+
 .app-auth-container{
     display: flex;
     justify-content: center;
@@ -7,5 +9,6 @@
     &__changer{
         cursor: pointer;
         margin: 12px;
+        color: $accent-color;
     }
 }

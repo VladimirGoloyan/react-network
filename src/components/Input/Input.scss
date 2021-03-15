@@ -1,5 +1,7 @@
+@import '../../styles/root';
+
 .app-input{
-    border: 1px solid black;
+    border: 1px solid $accent-color;
     border-radius: 4px;
-    margin :16px;
+    margin :20px;
 }

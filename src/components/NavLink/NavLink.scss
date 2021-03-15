@@ -1,4 +1,10 @@
+@import '../../styles/root';
+
+.app-nav-link{
+    color: $accent-color;
+    text-decoration: none;
+}
 .app-nav-link--active{
-    color: white;
+    color: $secondary-color;
 }
 
