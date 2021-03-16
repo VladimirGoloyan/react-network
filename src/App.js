@@ -1,6 +1,8 @@
-import React, { Component, useContext, createContext } from "react";
+import React, { Component } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { Provider } from "react-redux";
+import { store } from "./reducers/store";
 
 import AppRoutes from "./components/AppRoutes/AppRoutes";
 import Header from "./components/Header/Header";
@@ -13,14 +15,16 @@ export class App extends Component {
   render() {
     return (
       <>
-        <AppProvider>
-          <BrowserRouter>
-            <Header />
-            <Layout>
-              <AppRoutes />
-            </Layout>
-          </BrowserRouter>
-        </AppProvider>
+        <Provider store={store}>
+          <AppProvider>
+            <BrowserRouter>
+              <Header />
+              <Layout>
+                <AppRoutes />
+              </Layout>
+            </BrowserRouter>
+          </AppProvider>
+        </Provider>
         <ToastContainer
           position="bottom-right"
           className="app-toast-container"
