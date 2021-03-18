@@ -87,7 +87,6 @@ const Todos = (props) => {
         .then((data) => {
           setTodos(data);
           props.setReduxTodos(data);
-          console.log(props)
         })
         .catch((err) => {
           console.log("Caught an error : ", err);
