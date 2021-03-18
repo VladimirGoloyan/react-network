@@ -31,11 +31,11 @@ const reducer = (state = initialState, action) => {
           return el;
         }),
       };
-    case actionTypesRedux.CREATE_TODOS:
+    case actionTypesRedux.CREATE_TODO:
       console.log(action);
       return {
         ...state,
-        todos: [...state.posts, action.payload.todo],
+        todos: [...state.todos, action.payload.todo],
       };
     default:
       return state;

@@ -11,7 +11,8 @@ const ItemModal = ({
   changeValue,
   action,
   onClose,
-  buttonTitle
+  buttonTitle,
+  checkBox = false,
 }) => {
   return (
     <Modal className="modal" open={isOpen} onClose={onClose}>
@@ -22,14 +23,33 @@ const ItemModal = ({
           className="modal__input"
           value={titleValue}
         ></input>
-        <input
-          name="bodyValue"
-          onChange={changeValue}
-          className="modal__input"
-          value={bodyValue}
-        ></input>
-        <Button variant="contained" color="primary" onClick={action} title={buttonTitle}>
-        {buttonTitle}
+        {checkBox ? (
+          <>
+            <span>Completed</span>
+            <input
+              type="checkbox"
+              name="completedValue"
+              onChange={changeValue}
+              className="modal__input"
+              value={bodyValue}
+            ></input>
+          </>
+        ) : (
+          <input
+            name="bodyValue"
+            onChange={changeValue}
+            className="modal__input"
+            value={bodyValue}
+          ></input>
+        )}
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={action}
+          title={buttonTitle}
+        >
+          {buttonTitle}
         </Button>
       </div>
     </Modal>

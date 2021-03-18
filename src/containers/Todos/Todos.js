@@ -6,6 +6,7 @@ import { actionTypesRedux } from "../../reducers/actionTypesRedux";
 
 import Todo from "../../components/Todo/Todo";
 import { Button } from "@material-ui/core";
+import ItemModal from "../../components/ItemModal/ItemModal";
 
 import "./Todos.scss";
 
@@ -14,6 +15,9 @@ const Todos = (props) => {
   const [todos, setTodos] = useState([]);
   const [start, setStart] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [isModal, setIsModal] = useState(false)
+  const [titleValue, setTitleValue] = useState('')
+  const [completeValue, setCompleteValue] = useState(false)
 
   const context = useContext(AppContext);
 
@@ -21,8 +25,29 @@ const Todos = (props) => {
     fbService.pushTodos();
   };
 
+  const toggleModal = () =>{
+      setIsModal(!isModal);
+  }
+
+  const createTodo = () => {
+    const newTodo = {
+      title: titleValue,
+      completed: completeValue,
+      userId: 1,
+    };
+    fbService.createItem(newTodo, "todos").then((data) => {
+      console.log('fbService create item :',data)
+      props.createReduxTodo({
+        type: actionTypesRedux.CREATE_POST,
+        payload: { todos: data },
+      });
+      console.log('props :' ,props)
+      toggleModal();
+    });
+  };
+
   useEffect(() => {
-    if (!props.posts) {
+    if (!props.todos) {
       fbService
         .getItems(start, limit, "todos")
         .then((data) => {
@@ -55,11 +80,34 @@ const Todos = (props) => {
     );
   };
 
+  const changeValue = (e) =>{
+      if(e.target.name == 'titleValue')
+        setTitleValue(e.target.value)
+      else if(e.target.name == "completeValue")
+        setCompleteValue(e.target.value)
+    }
+
   return (
     <>
+      <ItemModal
+          action={createTodo}
+          checkBox={true}
+          completeValue={completeValue}
+          titleValue={titleValue}
+          changeValue={changeValue}
+          isOpen={isModal}
+          onClose={toggleModal}
+          buttonTitle="Create"
+        />
       {context.state.user ? (
         <div className="app-todos">
-          <Button className="app-todos__reset" onClick={() => pushTodos()}>
+          <Button
+            className="app-todos__button"
+            onClick={() => toggleModal()}
+          >
+            Create ToDo
+          </Button>
+          <Button className="app-todos__button" onClick={() => pushTodos()}>
             Reset original todos
           </Button>
           <div className="app-todos__container">
@@ -81,7 +129,7 @@ const Todos = (props) => {
           {hasMore && (
             <div className="app-todos__get-more">
               <Button className="app-todos__get-more__button" onClick={getMore}>
-                Get More Posts
+                Get More Todos
               </Button>
             </div>
           )}
@@ -89,7 +137,6 @@ const Todos = (props) => {
       ) : (
         <div className="app-todos__no-user">
           <span className="app-todos__no-user__text">
-            {" "}
             Sign in to explore to do lists
           </span>
         </div>
@@ -115,6 +162,18 @@ const mapDispatchToProps = {
     type: actionTypesRedux.GET_MORE_TODOS,
     payload: {
       todos,
+    },
+  }),
+  createReduxTodo: (todo) => ({
+    type: actionTypesRedux.CREATE_TODO,
+    payload: {
+      todo,
+    },
+  }),
+  deleteReduxTodo: (todo) => ({
+    type: actionTypesRedux.DELETE_TODO,
+    payload: {
+      todo,
     },
   }),
 };

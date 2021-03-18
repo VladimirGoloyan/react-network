@@ -12,7 +12,7 @@
     justify-content: space-around;
     align-items: center;
     flex-direction: row;
-
+    
     &__item {
       background-color: $primary-color !important;
       color: $accent-color !important;
@@ -35,7 +35,6 @@
     flex-direction: column;
     margin: 16px 0;
     border-radius: 16px;
-    border: 1px solid black;
     width: 60%;
 
     &__post {
