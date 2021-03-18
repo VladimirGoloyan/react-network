@@ -13,7 +13,7 @@ import "./Todos.scss";
 const Todos = (props) => {
   const limit = 3;
   const [todos, setTodos] = useState([]);
-  const [start, setStart] = useState(0);
+  const [start, setStart] = useState(4);
   const [hasMore, setHasMore] = useState(true);
   const [isModal, setIsModal] = useState(false)
   const [titleValue, setTitleValue] = useState('')
@@ -50,7 +50,7 @@ const Todos = (props) => {
     console.log("props useEffect",props)
     if (!props.todos) {
       fbService
-        .getItems(start, limit, "todos")
+        .getItems(0, limit, "todos")
         .then((data) => {
           setTodos(data);
           props.setReduxTodos(data);
@@ -64,6 +64,9 @@ const Todos = (props) => {
 
   const getMore = async () => {
     const newStart = start + limit + 1;
+    console.log('start : ', start )
+    console.log('limit : ', limit )
+    console.log('newstart : ', newStart )
     setStart(newStart);
     const res = await fbService.getItems(start, start + limit, "todos");
     setTodos(todos.concat(res));
@@ -79,6 +82,16 @@ const Todos = (props) => {
         return el.id != id;
       })
     );
+    fbService
+        .getItems(0, start - 1 , "todos")
+        .then((data) => {
+          setTodos(data);
+          props.setReduxTodos(data);
+          console.log(props)
+        })
+        .catch((err) => {
+          console.log("Caught an error : ", err);
+        });
   };
 
   const changeValue = (e) =>{

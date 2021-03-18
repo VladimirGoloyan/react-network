@@ -51,14 +51,14 @@ class fbService {
   };
 
   deleteItem = async (id, path) => {
-    const postRef = firebase.database().ref(`${path}/${id}`);
-    await postRef.remove();
-    const posts = await this.getAllItems('posts');
+    const itemRef = firebase.database().ref(`${path}/${id}`);
+    await itemRef.remove();
+    const items = await this.getAllItems(path);
     firebase
       .database()
       .ref(path)
       .set(
-        posts.map((el, idx) => {
+        items.map((el, idx) => {
           return {
             ...el,
             id: idx,
