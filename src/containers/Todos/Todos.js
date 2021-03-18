@@ -47,6 +47,7 @@ const Todos = (props) => {
   };
 
   useEffect(() => {
+    console.log("props useEffect",props)
     if (!props.todos) {
       fbService
         .getItems(start, limit, "todos")

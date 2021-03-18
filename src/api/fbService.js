@@ -43,10 +43,9 @@ class fbService {
     return Object.values(data);
   };
 
-  updateItem = async (postData, path) => {
-    const postRef = firebase.database().ref(`${path}/${postData.id}`);
-    await postRef.update(postData);
-    console.log(postData);
+  updateItem = async (itemData, path) => {
+    const postRef = firebase.database().ref(`${path}/${itemData.id}`);
+    await postRef.update(itemData);
     const res = await postRef.get();
     return res.val();
   };
