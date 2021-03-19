@@ -20,11 +20,18 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      Profile of {context.state.user.displayName}
-      <Button onClick={logOutHandler} color="primary" variant="contained">
+    <div className="app-profile">
+      <div className="app-profile__container">
+      {context.state.user ? (
+        <span>
+          Profile of 
+          {' ' + context.state.user.data.displayName || ' ' +  context.state.user.data.email}
+        </span>
+      ): null}
+      <Button onClick={logOutHandler} className="app-profile__container__log-out">
         Log out
       </Button>
+      </div>
     </div>
   );
 };

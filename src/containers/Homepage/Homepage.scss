@@ -1,0 +1,26 @@
+@import '../../styles/colors';
+
+.app-homepage {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+
+  &__container{
+      width: 80%;
+      height: 40%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex-direction: row;
+      background-color: $secondary-color;
+      border-radius: 20px;
+  }
+
+  &__button {
+    background-color: $primary-color !important;
+    color: $secondary-color !important;
+    margin-bottom: 8px !important;
+  }
+}

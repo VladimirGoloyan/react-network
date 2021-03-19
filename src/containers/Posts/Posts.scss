@@ -12,20 +12,16 @@
     justify-content: space-around;
     align-items: center;
     flex-direction: row;
-    
-    &__item {
-      background-color: $primary-color !important;
-      color: $accent-color !important;
-    }
   }
+
   &__get-more {
     margin-top: 16px;
+  }
 
-    &__button{
-      background-color: $primary-color !important;
-      color: $accent-color !important;
-      margin-bottom: 8px !important;
-    }
+  &__button {
+    background-color: $primary-color !important;
+    color: $secondary-color !important;
+    margin-bottom: 8px !important;
   }
 
   &__container {

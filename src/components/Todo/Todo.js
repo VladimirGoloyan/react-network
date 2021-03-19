@@ -23,7 +23,7 @@ const Todo = ({ title, children, completed,remove,item}) => {
       <Button  variant="contained" className={complete ? "todo-container__done" : "todo-container__not-done"} onClick={toggleComplete}>
         {complete ? "Completed":"Not Completed" }
       </Button>
-      <Button onClick={remove}>Delete</Button>
+      <Button onClick={remove} className="todo-container__remove">Delete</Button>
       </div>
     </div>
   );

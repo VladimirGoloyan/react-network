@@ -35,20 +35,19 @@ const Todos = (props) => {
       completed: completeValue,
       userId: 1,
     };
-    fbService.createItem(newTodo, "todos").then((data) => {
+   fbService.createItem(newTodo, "todos").then((data) => {
       console.log('fbService create item :',data)
       props.createReduxTodo({
         type: actionTypesRedux.CREATE_POST,
         payload: { todos: data },
       });
-      console.log('props :' ,props)
       toggleModal();
     });
   };
 
   useEffect(() => {
     console.log("props useEffect",props)
-    if (!props.todos) {
+   // if (!props.todos) {
       fbService
         .getItems(0, limit, "todos")
         .then((data) => {
@@ -59,19 +58,15 @@ const Todos = (props) => {
         .catch((err) => {
           console.log("Caught an error : ", err);
         });
-    }
+    //}
   }, []);
 
   const getMore = async () => {
     const newStart = start + limit + 1;
-    console.log('start : ', start )
-    console.log('limit : ', limit )
-    console.log('newstart : ', newStart )
     setStart(newStart);
     const res = await fbService.getItems(start, start + limit, "todos");
     setTodos(todos.concat(res));
     props.getMoreReduxTodos(res);
-    console.log('props after getMore: ',props)
     res.length < limit ? setHasMore(false) : setHasMore(true);
   };
 
@@ -141,7 +136,7 @@ const Todos = (props) => {
           </div>
           {hasMore && (
             <div className="app-todos__get-more">
-              <Button className="app-todos__get-more__button" onClick={getMore}>
+              <Button className="app-todos__button" onClick={getMore}>
                 Get More Todos
               </Button>
             </div>

@@ -30,7 +30,12 @@
   }
   &__delete {
     margin-bottom: 16px;
-    background-color: $primary-color !important;
-    color: $accent-color !important;
+    background-color: $complete-color !important;
+    color: $primary-color !important;
+
+    &:hover {
+      background-color: $delete-color !important;
+      color: $secondary-color !important;
+    }
   }
 }

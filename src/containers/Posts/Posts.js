@@ -29,19 +29,21 @@ export default class Posts extends Component {
           bodyValue={this.state.bodyValue}
           titleValue={this.state.titleValue}
           changeValue={this.changeValue}
-          isOpen={this.state.isCreateModalOpen}
+          isOpen={this.state.isCreateModalOpen}                 
           onClose={this.toggleCreateModal}
           buttonTitle="Create"
         />
         <div className="app-posts__buttons-container">
+          {this.context.state.user && (
+            <Button
+              className="app-posts__button"
+              onClick={() => this.toggleCreateModal()}
+            >
+              Create Post
+            </Button>
+          )}
           <Button
-            className="app-posts__buttons-container__item"
-            onClick={() => this.toggleCreateModal()}
-          >
-            Create Post
-          </Button>
-          <Button
-            className="app-posts__buttons-container__item"
+            className="app-posts__button"
             onClick={() => this.pushPosts()}
           >
             Reset original posts
@@ -65,7 +67,12 @@ export default class Posts extends Component {
             })}
             {this.state.hasMore && (
               <div className="app-posts__get-more">
-                <Button className='app-posts__get-more__button' onClick={() => this.getMore()}>Get More Posts</Button>
+                <Button
+                  className="app-posts__button"
+                  onClick={() => this.getMore()}
+                >
+                  Get More Posts
+                </Button>
               </div>
             )}
           </div>

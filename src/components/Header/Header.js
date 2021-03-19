@@ -35,7 +35,7 @@ const Header = () => {
       {!context.state.user ? (
         <li className="app-header__nav-list__item">
           <NavLink  to={"/auth"}>
-            Auth
+            Authentication
           </NavLink>
         </li>
       ) : (
