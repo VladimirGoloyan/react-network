@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import storeService from "../../api/storageService";
-import fbService from "../../api/fbService";
 import { AppContext } from "../../context/AppContext";
 
+import Loader from '../../components/Loader/Loader'
 import { Button } from "@material-ui/core";
 
 import "./Profile.scss";
@@ -22,12 +22,14 @@ const Profile = () => {
   return (
     <div className="app-profile">
       <div className="app-profile__container">
-      {context.state.user ? (
+      {context.state.user.data.displayName ? (
         <span>
           Profile of 
           {' ' + context.state.user.data.displayName || ' ' +  context.state.user.data.email}
         </span>
-      ): null}
+      ): (
+        <Loader/>
+      )}
       <Button onClick={logOutHandler} className="app-profile__container__log-out">
         Log out
       </Button>

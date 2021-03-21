@@ -47,24 +47,14 @@ const Todos = (props) => {
       completed: completeValue,
       userId: 1,
     };
-    fbService.createItem(newTodo, "todos").then((data) => {
-      console.log("fbService create item :", data);
-      props.createReduxTodo(data);
+    props.createReduxTodo(newTodo)
       toggleModal();
-    });
+    
   };
 
   useEffect(() => {
     if (!props.todos) {
-      fbService
-        .getItems(0, limit, "todos")
-        .then((data) => {
-          props.setReduxTodos(data);
-          console.log(props);
-        })
-        .catch((err) => {
-          console.log("Caught an error : ", err);
-        });
+      props.setReduxTodos(0,limit)
     }
   }, []);
 
@@ -80,16 +70,7 @@ const Todos = (props) => {
   };
 
   const deleteTodo = async (id) => {
-    await fbService.deleteItem(id, "todos");
-    props.deleteReduxTodo(id);
-    fbService
-      .getItems(0, start - 1, "todos")
-      .then((data) => {
-        props.setReduxTodos(data);
-      })
-      .catch((err) => {
-        console.log("Caught an error : ", err);
-      });
+    props.deleteReduxTodo(id)
   };
 
   const updateTodo = async (id) => {

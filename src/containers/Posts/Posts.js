@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { connect } from "react-redux";
 import {setReduxPosts, getMoreReduxPosts, createReduxPosts, deleteReduxPost} from '../../actions/postActions'
-import fbservice from "../../api/fbService";
+import fbService from "../../api/fbService";
 
 import Button from "@material-ui/core/button";
 import Post from "../../components/Post/Post";
@@ -32,16 +32,8 @@ const Posts = (props) => {
   const context = useContext(AppContext);
   
   useEffect(() => {
-    {console.log("props",props)}
     if (!props.posts) {
-      fbservice
-        .getItems(0, limit, "posts")
-        .then((data) => {
-          props.setReduxPosts(data);
-        })
-        .catch((err) => {
-          console.log("Caught an error : ", err);
-        });
+      props.setReduxPosts(0,limit)
     }
   }, []);
 
@@ -60,7 +52,7 @@ const Posts = (props) => {
   };
 
   const pushPosts = () => {
-    fbservice.pushPosts();
+    fbService.pushPosts();
   };
 
   const createPost = () => {
@@ -69,33 +61,25 @@ const Posts = (props) => {
       body: bodyValue,
       userId: 1,
     };
-    fbservice.createItem(newPost, "posts").then((data) => {
-      props.createReduxPosts(data);
-      toggleCreateModal();
-      props.history.push(`posts/${data.id}`)
-    });
+    props.createReduxPosts(newPost)
+    toggleCreateModal();
+    //props.history.push(`posts/${id}`)
   };
 
   const deletePost = async (id) => {
-    await fbservice.deleteItem(id,'posts');
-    props.deleteReduxPost(id);
-    const data = await fbservice.getItems(0,start-1,'posts');
-    props.setReduxPosts(data);
+    props.deleteReduxPost(id,start)
   };
 
   const getMore = () => {
-    const {start, limit } = state
     const newStart = start + limit + 1;
     setState({
       ...state,
       start: newStart,
     });
-    fbservice.getItems(start, start + limit, "posts").then((data) => {
-      props.getMoreReduxPosts(data)
-      setState({
-        ...state,
-        hasMore: data.length < limit ? false : true,
-      });
+    props.getMoreReduxPosts(start,limit)
+    setState({
+      ...state,
+     // hasMore: data.length < limit ? false : true,
     });
   };
 

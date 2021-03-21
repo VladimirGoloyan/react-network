@@ -1,26 +1,57 @@
 import { actionTypesRedux } from "../reducers/actionTypesRedux";
 
-export const setReduxPosts = (posts) => ({
-  type: actionTypesRedux.SET_POSTS,
-  payload: {
-    posts,
-  },
-});
-export const getMoreReduxPosts = (posts) => ({
-  type: actionTypesRedux.GET_MORE_POSTS,
-  payload: {
-    posts,
-  },
-});
-export const createReduxPosts = (post) => ({
-  type: actionTypesRedux.CREATE_POST,
-  payload: {
-    post,
-  },
-});
-export const deleteReduxPost = (post) => ({
-  type: actionTypesRedux.DELETE_POST,
-  payload: {
-    post,
-  },
-});
+import fbService from "../api/fbService";
+
+export const setReduxPosts = (start, limit) => (dispatch) => {
+  fbService
+    .getItems(start, limit, "posts")
+    .then((data) => {
+      dispatch({
+        type: actionTypesRedux.SET_POSTS,
+        payload: {
+          posts: data,
+        },
+      });
+    })
+    .catch((err) => {
+      console.log("Caught an error : ", err);
+    });
+};
+
+export const getMoreReduxPosts = (start,limit) => (dispatch) => {
+  fbService.getItems(start, start + limit, "posts").then((data) => {
+    dispatch({
+      type: actionTypesRedux.GET_MORE_POSTS,
+      payload: {
+        posts:data,
+      },
+    });
+  })
+};
+
+export const createReduxPosts = (post) => (dispatch) => {
+  fbService.createItem(post, "posts").then((data) => {
+    dispatch({
+      type: actionTypesRedux.CREATE_POST,
+      payload: {
+        post:data,
+      },
+    });
+  });
+  
+};
+
+export const deleteReduxPost = (id,start) => (dispatch) => {
+  fbService.deleteItem(id,'posts');
+  fbService.getItems(0,start-1,'posts').then((data)=>{
+    dispatch({
+      type: actionTypesRedux.SET_POSTS,
+      payload: {
+        posts:data.map((el,idx)=>{
+          console.log(` number ${idx}`,el)
+          return el.id = idx
+        }),
+      },
+    });
+  })
+};
