@@ -41,7 +41,7 @@ const Post = ({
     ) : (
       <div className={`app-post ${className}`}>
         {children}
-        <Button variant="contained" color="primary" onClick={edit}>
+        <Button variant='contained' className="app-posts__button" onClick={edit}>
           <EditIcon />
           <span>Edit</span>
         </Button>

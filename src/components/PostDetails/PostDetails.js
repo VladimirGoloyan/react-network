@@ -86,6 +86,7 @@ export default class PostDetails extends Component {
 
     return (
       <div className="post-details-container">
+        <div className='post-details-container__inner'>
         <Post post={post} edit={this.toggleEditModal} />
         <ItemModal
             action={this.saveEditedPost}
@@ -96,6 +97,7 @@ export default class PostDetails extends Component {
             onClose={this.toggleEditModal}
             buttonTitle="Save"
         />
+        </div>
       </div>
     );
   }

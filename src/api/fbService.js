@@ -84,7 +84,7 @@ class fbService {
     };
     await firebase
       .database()
-      .ref(`posts/${id + 1}`)
+      .ref(`${path}/${id + 1}`)
       .set(newItem);
     return newItem;
   };

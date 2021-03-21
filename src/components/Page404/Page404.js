@@ -1,11 +1,13 @@
-import React from 'react'
+import React from "react";
+
+import "./Page404.scss";
 
 const Page404 = () => {
-    return (
-        <div>
-            Error 404: Page not found
-        </div>
-    )
-}
+  return (
+    <div className="app-404">
+      <div className="app-404__image" />
+    </div>
+  );
+};
 
-export default Page404
+export default Page404;

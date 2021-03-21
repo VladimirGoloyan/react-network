@@ -44,6 +44,7 @@ const ItemModal = ({
         )}
 
         <Button
+        className='modal__button'
           variant="contained"
           color="primary"
           onClick={action}

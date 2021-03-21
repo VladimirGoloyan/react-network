@@ -2,22 +2,34 @@ import React, { useState, useEffect, useContext } from "react";
 import { connect } from "react-redux";
 import { AppContext } from "../../context/AppContext";
 import fbService from "../../api/fbService";
-import { actionTypesRedux } from "../../reducers/actionTypesRedux";
+import {
+  setReduxTodos,
+  getMoreReduxTodos,
+  createReduxTodo,
+  deleteReduxTodo,
+} from "../../actions/todoActions";
 
 import Todo from "../../components/Todo/Todo";
 import { Button } from "@material-ui/core";
 import ItemModal from "../../components/ItemModal/ItemModal";
+import Loader from "../../components/Loader/Loader";
+import SignInToExplore from "../../components/SIgnInToExplore/SignInToExplore";
 
 import "./Todos.scss";
 
 const Todos = (props) => {
   const limit = 3;
-  const [todos, setTodos] = useState([]);
-  const [start, setStart] = useState(4);
-  const [hasMore, setHasMore] = useState(true);
-  const [isModal, setIsModal] = useState(false)
-  const [titleValue, setTitleValue] = useState('')
-  const [completeValue, setCompleteValue] = useState(false)
+
+  const [state, setState] = useState({
+    todos: [],
+    start: 4,
+    hasMore: true,
+    isModal: false,
+    titleValue: "",
+    completeValue: false,
+  });
+
+  const { start, hasMore, isModal, titleValue, completeValue } = state;
 
   const context = useContext(AppContext);
 
@@ -25,9 +37,9 @@ const Todos = (props) => {
     fbService.pushTodos();
   };
 
-  const toggleModal = () =>{
-      setIsModal(!isModal);
-  }
+  const toggleModal = () => {
+    setState({ ...state, isModal: !isModal });
+  };
 
   const createTodo = () => {
     const newTodo = {
@@ -35,104 +47,101 @@ const Todos = (props) => {
       completed: completeValue,
       userId: 1,
     };
-   fbService.createItem(newTodo, "todos").then((data) => {
-      console.log('fbService create item :',data)
-      props.createReduxTodo({
-        type: actionTypesRedux.CREATE_POST,
-        payload: { todos: data },
-      });
+    fbService.createItem(newTodo, "todos").then((data) => {
+      console.log("fbService create item :", data);
+      props.createReduxTodo(data);
       toggleModal();
     });
   };
 
   useEffect(() => {
-    console.log("props useEffect",props)
-   // if (!props.todos) {
+    if (!props.todos) {
       fbService
         .getItems(0, limit, "todos")
         .then((data) => {
-          setTodos(data);
           props.setReduxTodos(data);
-          console.log(props)
+          console.log(props);
         })
         .catch((err) => {
           console.log("Caught an error : ", err);
         });
-    //}
+    }
   }, []);
 
   const getMore = async () => {
     const newStart = start + limit + 1;
-    setStart(newStart);
+    setState({ ...state, start: newStart });
+    console.log("state : ", state);
     const res = await fbService.getItems(start, start + limit, "todos");
-    setTodos(todos.concat(res));
     props.getMoreReduxTodos(res);
-    res.length < limit ? setHasMore(false) : setHasMore(true);
+    res.length < limit
+      ? setState({ ...state, hasMore: false })
+      : setState({ ...state, hasMore: true });
   };
 
   const deleteTodo = async (id) => {
     await fbService.deleteItem(id, "todos");
-    setTodos(
-      todos.filter((el) => {
-        return el.id != id;
-      })
-    );
+    props.deleteReduxTodo(id);
     fbService
-        .getItems(0, start - 1 , "todos")
-        .then((data) => {
-          setTodos(data);
-          props.setReduxTodos(data);
-        })
-        .catch((err) => {
-          console.log("Caught an error : ", err);
-        });
+      .getItems(0, start - 1, "todos")
+      .then((data) => {
+        props.setReduxTodos(data);
+      })
+      .catch((err) => {
+        console.log("Caught an error : ", err);
+      });
   };
 
-  const changeValue = (e) =>{
-      if(e.target.name == 'titleValue')
-        setTitleValue(e.target.value)
-      else if(e.target.name == "completeValue")
-        setCompleteValue(e.target.value)
-    }
+  const updateTodo = async (id) => {
+    await fbService.updateItem(id, "todos");
+  };
+
+  const changeValue = (e) => {
+    if (e.target.name == "titleValue")
+      setState({ ...state, titleValue: e.target.value });
+    else if (e.target.name == "completeValue")
+      setState({ ...state, completeValue: e.target.value });
+  };
 
   return (
     <>
       <ItemModal
-          action={createTodo}
-          checkBox={true}
-          completeValue={completeValue}
-          titleValue={titleValue}
-          changeValue={changeValue}
-          isOpen={isModal}
-          onClose={toggleModal}
-          buttonTitle="Create"
-        />
+        action={createTodo}
+        checkBox={true}
+        completeValue={completeValue}
+        titleValue={titleValue}
+        changeValue={changeValue}
+        isOpen={isModal}
+        onClose={toggleModal}
+        buttonTitle="Create"
+      />
       {context.state.user ? (
         <div className="app-todos">
-          <Button
-            className="app-todos__button"
-            onClick={() => toggleModal()}
-          >
+          <Button className="app-todos__button" onClick={() => toggleModal()}>
             Create ToDo
           </Button>
           <Button className="app-todos__button" onClick={() => pushTodos()}>
             Reset original todos
           </Button>
           <div className="app-todos__container">
-            { todos.map((el, idx) => {
-              return (
-                <div key={idx} className="app-todos__container__item">
-                  <Todo
-                    key={el.id}
-                    item={el}
-                    title={el.title}
-                    completed={el.completed}
-                    remove={() => deleteTodo(el.id)}
-                  />
-                  {"--" + el.id + "--"}
-                </div>
-              );
-            })}
+            {props.todos ? (
+              props.todos.map((el, idx) => {
+                return (
+                  <div key={idx} className="app-todos__container__item">
+                    <Todo
+                      key={el.id}
+                      item={el}
+                      title={el.title}
+                      completed={el.completed}
+                      remove={() => deleteTodo(el.id)}
+                    />
+                    {"--" + el.id + "--"}
+                  </div>
+                );
+              })
+            ) : (
+              <Loader/>
+            )}
           </div>
           {hasMore && (
             <div className="app-todos__get-more">
@@ -144,9 +153,7 @@ const Todos = (props) => {
         </div>
       ) : (
         <div className="app-todos__no-user">
-          <span className="app-todos__no-user__text">
-            Sign in to explore to do lists
-          </span>
+          <SignInToExplore/>
         </div>
       )}
     </>
@@ -160,30 +167,10 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-  setReduxTodos: (todos) => ({
-    type: actionTypesRedux.SET_TODOS,
-    payload: {
-      todos,
-    },
-  }),
-  getMoreReduxTodos: (todos) => ({
-    type: actionTypesRedux.GET_MORE_TODOS,
-    payload: {
-      todos,
-    },
-  }),
-  createReduxTodo: (todo) => ({
-    type: actionTypesRedux.CREATE_TODO,
-    payload: {
-      todo,
-    },
-  }),
-  deleteReduxTodo: (todo) => ({
-    type: actionTypesRedux.DELETE_TODO,
-    payload: {
-      todo,
-    },
-  }),
+  setReduxTodos,
+  getMoreReduxTodos,
+  createReduxTodo,
+  deleteReduxTodo,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Todos);
