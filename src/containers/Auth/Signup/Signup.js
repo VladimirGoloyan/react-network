@@ -1,8 +1,8 @@
 import React, { useState, useContext } from "react";
+import { AppContext } from "../../../context/AppContext";
 import { useHistory } from "react-router-dom";
 import fbservice from "../../../api/fbService";
 import storeService from "../../../api/storageService";
-import { AppContext } from "../../../context/AppContext";
 
 import ErrorMessage from "../../../components/ErrorMessage/ErrorMessage";
 import Button from "@material-ui/core/Button";
@@ -53,10 +53,16 @@ const Signup = () => {
           setErrorState({ ...errorState, emailError: "Email badly formatted" });
           break;
         case 0.2:
-          setErrorState({ ...errorState, passwordError: "Password must contain at least 8 characters" });
+          setErrorState({
+            ...errorState,
+            passwordError: "Password must contain at least 8 characters",
+          });
           break;
         case 0.3:
-          setErrorState({ ...errorState, nameError: "Name cannot contain numbers" });
+          setErrorState({
+            ...errorState,
+            nameError: "Name cannot contain numbers",
+          });
           break;
         default:
           console.log(
@@ -80,6 +86,7 @@ const Signup = () => {
 
   return (
     <div className="app-auth-sign-up">
+      <div className="app-auth-sign-up__container">
       <Input
         name="name"
         loading={loading}
@@ -107,8 +114,9 @@ const Signup = () => {
       {errorState.passwordError && (
         <ErrorMessage text={errorState.passwordError} />
       )}
+      </div>
       <Button
-      className='app-auth-sign-up__button'
+        className="app-auth-sign-up__button"
         disabled={loading}
         variant="contained"
         color="primary"

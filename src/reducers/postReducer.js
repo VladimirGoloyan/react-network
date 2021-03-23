@@ -12,12 +12,7 @@ const reducer = (state = null, action) => {
 
     case actionTypesRedux.UPDATE_POST:
       console.log(action);
-      return state.posts.map((el) => {
-        if (el.id == action.payload.todo.id) {
-          return action.payload.post;
-        }
-        return el;
-      });
+      return [...state];
 
     case actionTypesRedux.CREATE_POST:
       console.log(action);

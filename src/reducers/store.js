@@ -10,8 +10,12 @@ const reducer = combineReducers({
 });
 
 const initialState = {
-  posts:null,
-  todos:null
-}
+  posts: null,
+  todos: null,
+};
 
-export const store = createStore(reducer, initialState, applyMiddleware(reduxThunk));
+export const store = createStore(
+  reducer,
+  initialState,
+  applyMiddleware(reduxThunk)
+);

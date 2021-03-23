@@ -17,9 +17,9 @@ class Service {
     });
   };
 
-  getPosts = (start,limit)=>{
-      return this._request("GET", `/posts?_start=${start}&_limit=${limit}`)
-  }
+  getPosts = (start, limit) => {
+    return this._request("GET", `/posts?_start=${start}&_limit=${limit}`);
+  };
 
   getAllPosts = () => {
     return this._request("GET", "/posts");
@@ -33,13 +33,13 @@ class Service {
     return this._request("POST", "/posts", data);
   };
 
-  updatePost = (id,data) => {
+  updatePost = (id, data) => {
     return this._request("PATCH", `/posts/${id}`, data);
   };
-  
-  deletePost = (id) =>{
-    return this._request("DELETE", `/posts/${id}`)
-  }
+
+  deletePost = (id) => {
+    return this._request("DELETE", `/posts/${id}`);
+  };
 }
 
 const service = new Service();

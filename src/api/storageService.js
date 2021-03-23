@@ -2,7 +2,7 @@ class StorageService {
   setData = (key, data, storageType) => {
     const storage = storageType == "local" ? localStorage : sessionStorage;
     try {
-      storage.setItem(key, JSON.stringify({ data }));
+      storage.setItem(key, JSON.stringify({ ...data }));
     } catch (err) {
       console.log("Error : " + err);
     }
@@ -17,5 +17,5 @@ class StorageService {
   };
 }
 
-const storeservice = new StorageService
-export default storeservice
+const storeservice = new StorageService();
+export default storeservice;

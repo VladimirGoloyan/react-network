@@ -1,14 +1,14 @@
-import React, { useState, useReducer } from "react";
+import React, { useReducer } from "react";
 
-import {AppContext, initialState} from './AppContext';
-import AppReducer from './AppReducer';
+import { AppContext, initialState } from "./AppContext";
+import AppReducer from "./AppReducer";
 
 const AppContextProvider = ({ children }) => {
-  const [state,dispatch] = useReducer(AppReducer, initialState)
+  const [state, dispatch] = useReducer(AppReducer, initialState);
 
   return (
     <div>
-      <AppContext.Provider value={{state, dispatch}}>
+      <AppContext.Provider value={{ state, dispatch }}>
         {children}
       </AppContext.Provider>
     </div>

@@ -1,14 +1,20 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { connect } from "react-redux";
-import {setReduxPosts, getMoreReduxPosts, createReduxPosts, deleteReduxPost} from '../../actions/postActions'
+import {
+  setReduxPosts,
+  getMoreReduxPosts,
+  createReduxPosts,
+  deleteReduxPost,
+} from "../../actions/postActions";
 import fbService from "../../api/fbService";
 
 import Button from "@material-ui/core/button";
 import Post from "../../components/Post/Post";
 import ItemModal from "../../components/ItemModal/ItemModal";
-import "./Posts.scss";
 import Loader from "../../components/Loader/Loader";
+
+import "./Posts.scss";
 
 const Posts = (props) => {
   const [state, setState] = useState({
@@ -28,12 +34,12 @@ const Posts = (props) => {
     titleValue,
     bodyValue,
   } = state;
-  
+
   const context = useContext(AppContext);
-  
+
   useEffect(() => {
     if (!props.posts) {
-      props.setReduxPosts(0,limit)
+      props.setReduxPosts(0, limit);
     }
   }, []);
 
@@ -61,13 +67,13 @@ const Posts = (props) => {
       body: bodyValue,
       userId: 1,
     };
-    props.createReduxPosts(newPost)
+    props.createReduxPosts(newPost);
     toggleCreateModal();
     //props.history.push(`posts/${id}`)
   };
 
   const deletePost = async (id) => {
-    props.deleteReduxPost(id,start)
+    props.deleteReduxPost(id, start);
   };
 
   const getMore = () => {
@@ -76,11 +82,7 @@ const Posts = (props) => {
       ...state,
       start: newStart,
     });
-    props.getMoreReduxPosts(start,limit)
-    setState({
-      ...state,
-     // hasMore: data.length < limit ? false : true,
-    });
+    props.getMoreReduxPosts(start, limit);
   };
 
   return (
@@ -107,7 +109,6 @@ const Posts = (props) => {
           Reset original posts
         </Button>
       </div>
-      {console.log(props)}
       {props.posts ? (
         <div className="app-posts">
           {props.posts.map((el, idx) => {
@@ -126,34 +127,30 @@ const Posts = (props) => {
           })}
           {hasMore && (
             <div className="app-posts__get-more">
-              <Button
-                className="app-posts__button"
-                onClick={() => getMore()}
-              >
+              <Button className="app-posts__button" onClick={() => getMore()}>
                 Get More Posts
               </Button>
             </div>
           )}
         </div>
       ) : (
-        <Loader/>
+        <Loader />
       )}
     </>
   );
 };
 
 const mapStateToProps = (state) => {
-  console.log("state",state)
   return {
     posts: state.posts,
   };
 };
 
 const mapDispatchToProps = {
-  setReduxPosts, 
-  getMoreReduxPosts, 
-  createReduxPosts, 
-  deleteReduxPost
+  setReduxPosts,
+  getMoreReduxPosts,
+  createReduxPosts,
+  deleteReduxPost,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Posts);

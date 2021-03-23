@@ -18,15 +18,15 @@ export const setReduxPosts = (start, limit) => (dispatch) => {
     });
 };
 
-export const getMoreReduxPosts = (start,limit) => (dispatch) => {
+export const getMoreReduxPosts = (start, limit) => (dispatch) => {
   fbService.getItems(start, start + limit, "posts").then((data) => {
     dispatch({
       type: actionTypesRedux.GET_MORE_POSTS,
       payload: {
-        posts:data,
+        posts: data,
       },
     });
-  })
+  });
 };
 
 export const createReduxPosts = (post) => (dispatch) => {
@@ -34,24 +34,42 @@ export const createReduxPosts = (post) => (dispatch) => {
     dispatch({
       type: actionTypesRedux.CREATE_POST,
       payload: {
-        post:data,
+        post: data,
       },
     });
   });
-  
 };
 
-export const deleteReduxPost = (id,start) => (dispatch) => {
-  fbService.deleteItem(id,'posts');
-  fbService.getItems(0,start-1,'posts').then((data)=>{
+export const deleteReduxPost = (id, start) => (dispatch) => {
+  fbService.deleteItem(id, "posts").then(() => {
+    fbService.getItems(0, start - 1, "posts").then((data) => {
+      dispatch({
+        type: actionTypesRedux.SET_POSTS,
+        payload: {
+          posts: data,
+        },
+      });
+    });
+  });
+};
+
+export const updateReduxPost = (newPost) => (dispatch, getState) => {
+  fbService.updateItem(newPost, "posts").then((data) => {
+    setReduxPosts(0, calcLength(data.id));
     dispatch({
-      type: actionTypesRedux.SET_POSTS,
+      type: actionTypesRedux.UPDATE_POST,
       payload: {
-        posts:data.map((el,idx)=>{
-          console.log(` number ${idx}`,el)
-          return el.id = idx
-        }),
+        post: data,
       },
     });
-  })
+  });
+};
+
+const calcLength = (num) => {
+  const start = 0;
+  while (num > start) {
+    if (num == start) break;
+    start = start + 5;
+  }
+  return start;
 };

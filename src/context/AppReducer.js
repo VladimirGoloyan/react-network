@@ -14,7 +14,6 @@ const AppReducer = (state, action) => {
         ...state,
         user: null,
       };
-    
     default:
       return state;
   }

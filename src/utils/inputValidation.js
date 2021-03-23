@@ -7,19 +7,19 @@ class inputValidation {
     const passRes = rePassword.test(String(credentials.password));
     const nameRes = !reDisplayName.test(String(credentials.name));
 
-    console.log(mailRes)
-    console.log(passRes)
-    console.log(nameRes)
+    console.log(mailRes);
+    console.log(passRes);
+    console.log(nameRes);
     if (mailRes && passRes && !nameRes) {
       return 1;
     } else if (nameRes) {
       return 0.3;
     } else if (!mailRes) {
-        return 0.1;
+      return 0.1;
     } else if (!passRes) {
-        return 0.2;
+      return 0.2;
     }
   }
 }
-const iVal = new inputValidation
-export default iVal
+const iVal = new inputValidation();
+export default iVal;

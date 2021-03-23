@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import storeService from "../../api/storageService";
 import { AppContext } from "../../context/AppContext";
+import storeService from "../../api/storageService";
 
-import Loader from '../../components/Loader/Loader'
 import { Button } from "@material-ui/core";
+import Loader from "../../components/Loader/Loader";
 
 import "./Profile.scss";
 
@@ -22,17 +22,21 @@ const Profile = () => {
   return (
     <div className="app-profile">
       <div className="app-profile__container">
-      {context.state.user.data.displayName ? (
-        <span>
-          Profile of 
-          {' ' + context.state.user.data.displayName || ' ' +  context.state.user.data.email}
-        </span>
-      ): (
-        <Loader/>
-      )}
-      <Button onClick={logOutHandler} className="app-profile__container__log-out">
-        Log out
-      </Button>
+        {context.state.user && context.state.user.displayName ? (
+          <span>
+            Profile of
+            {" " + context.state.user.displayName ||
+              " " + context.state.user.email}
+          </span>
+        ) : (
+          <Loader />
+        )}
+        <Button
+          onClick={logOutHandler}
+          className="app-profile__container__log-out"
+        >
+          Log out
+        </Button>
       </div>
     </div>
   );

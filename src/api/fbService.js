@@ -16,7 +16,7 @@ class fbService {
     firebase.database().ref("/posts").set(postsMockup);
   }
 
-  pushTodos(){
+  pushTodos() {
     firebase.database().ref("/todos").set(todosMockup);
   }
 
@@ -67,7 +67,7 @@ class fbService {
       );
   };
 
-  createItem = async (postData,path) => {
+  createItem = async (postData, path) => {
     const res = await firebase
       .database()
       .ref(path)
@@ -77,7 +77,7 @@ class fbService {
     const lastItemJson = res.toJSON();
     const lastItem = Object.values(lastItemJson)[0];
     const { id } = lastItem;
-    console.log(id)
+    console.log(id);
     const newItem = {
       ...postData,
       id: id + 1,

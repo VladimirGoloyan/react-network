@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+
 import { Modal, Button } from "@material-ui/core";
 
 import "./ItemModal.scss";
@@ -44,7 +45,7 @@ const ItemModal = ({
         )}
 
         <Button
-        className='modal__button'
+          className="modal__button"
           variant="contained"
           color="primary"
           onClick={action}
