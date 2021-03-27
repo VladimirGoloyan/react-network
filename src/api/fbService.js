@@ -9,14 +9,14 @@ import todosMockup from "../data-mockup/todos-mockup";
 class fbService {
   constructor() {
     this.baseUrl = "https://react-project-d7762-default-rtdb.firebaseio.com";
-    if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
+    if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
   }
 
   pushPosts() {
     firebase.database().ref("/posts").set(postsMockup);
   }
 
-  pushTodos(){
+  pushTodos() {
     firebase.database().ref("/todos").set(todosMockup);
   }
 
@@ -43,23 +43,22 @@ class fbService {
     return Object.values(data);
   };
 
-  updateItem = async (postData, path) => {
-    const postRef = firebase.database().ref(`${path}/${postData.id}`);
-    await postRef.update(postData);
-    console.log(postData);
+  updateItem = async (itemData, path) => {
+    const postRef = firebase.database().ref(`${path}/${itemData.id}`);
+    await postRef.update(itemData);
     const res = await postRef.get();
     return res.val();
   };
 
   deleteItem = async (id, path) => {
-    const postRef = firebase.database().ref(`${path}/${id}`);
-    await postRef.remove();
-    const posts = await this.getAllItems('posts');
+    const itemRef = firebase.database().ref(`${path}/${id}`);
+    await itemRef.remove();
+    const items = await this.getAllItems(path);
     firebase
       .database()
       .ref(path)
       .set(
-        posts.map((el, idx) => {
+        items.map((el, idx) => {
           return {
             ...el,
             id: idx,
@@ -68,7 +67,7 @@ class fbService {
       );
   };
 
-  createItem = async (postData,path) => {
+  createItem = async (postData, path) => {
     const res = await firebase
       .database()
       .ref(path)
@@ -78,14 +77,14 @@ class fbService {
     const lastItemJson = res.toJSON();
     const lastItem = Object.values(lastItemJson)[0];
     const { id } = lastItem;
-    console.log(id)
+    console.log(id);
     const newItem = {
       ...postData,
       id: id + 1,
     };
     await firebase
       .database()
-      .ref(`posts/${id + 1}`)
+      .ref(`${path}/${id + 1}`)
       .set(newItem);
     return newItem;
   };

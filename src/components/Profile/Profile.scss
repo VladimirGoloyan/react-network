@@ -1,0 +1,25 @@
+@import "../../styles/colors";
+
+.app-profile {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+
+  &__container {
+    width: 50%;
+    height: 50%;
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+    background-color: $secondary-color;
+
+    &__log-out {
+      background-color: $primary-color !important;
+      color: $secondary-color !important;
+    }
+  }
+}

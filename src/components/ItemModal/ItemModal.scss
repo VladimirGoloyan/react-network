@@ -1,10 +1,11 @@
+@import '../../styles/colors';
 .modal {
     display: flex;
     align-items: center;
     justify-content: center;
 
     &__input{
-        width: 80%;
+        width: 60%;
         margin: 16px;
         border-radius: 4px;
     }
@@ -16,7 +17,14 @@
       flex-direction: column;
       width: 550px;
       height: 350px;
-      background-color: #ccc;
-      color: white;
+      border-radius: 50px;
+      background: url('../../assets/modal.jpg') no-repeat center center fixed;
+      color: $secondary-color;
+    }
+
+    &__button{
+      background-color: $primary-color !important;
+      color: $secondary-color !important;
+      margin-bottom: 8px !important;
     }
   }

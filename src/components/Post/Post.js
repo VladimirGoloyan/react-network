@@ -1,10 +1,10 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../../context/AppContext";
 import PropTypes from "prop-types";
 
 import Link from "../Link/Link";
 import EditIcon from "@material-ui/icons/Edit";
 import Button from "@material-ui/core/Button";
-import {AppContext} from '../../context/AppContext'
 
 import "./Post.scss";
 
@@ -17,7 +17,7 @@ const Post = ({
   edit = () => {},
   remove = () => {},
 }) => {
-  const context = useContext(AppContext)
+  const context = useContext(AppContext);
 
   const removeHandler = (e) => {
     e.preventDefault();
@@ -28,20 +28,26 @@ const Post = ({
     return isLink ? (
       <Link to={`posts/${post.id}`}>
         <div className={`app-post ${className}`}>
-        {children}
-        {context.state.user ? (
-          <Button variant="outlined" className="app-post__delete" onClick={removeHandler}>
-            Delete
-          </Button>
-        ): (
-          null
-        )}
+          {children}
+          {context.state.user ? (
+            <Button
+              variant="outlined"
+              className="app-post__delete"
+              onClick={removeHandler}
+            >
+              Delete
+            </Button>
+          ) : null}
         </div>
       </Link>
     ) : (
       <div className={`app-post ${className}`}>
         {children}
-        <Button variant="contained" color="primary" onClick={edit}>
+        <Button
+          variant="contained"
+          className="app-posts__button"
+          onClick={edit}
+        >
           <EditIcon />
           <span>Edit</span>
         </Button>
@@ -53,9 +59,9 @@ const Post = ({
     <Wrapper>
       <div className={`app-post ${className}`}>
         <span className="app-post__title">{post.title}</span>
-        <hr className='app-post__hr'/>
+        <hr className="app-post__hr" />
         <span className="app-post__body">{post.body}</span>
-        </div>
+      </div>
     </Wrapper>
   );
 };

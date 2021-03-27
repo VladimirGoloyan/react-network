@@ -1,158 +1,156 @@
-import React, { Component } from "react";
-import fbservice from "../../api/fbService";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../../context/AppContext";
+import { connect } from "react-redux";
+import {
+  setReduxPosts,
+  getMoreReduxPosts,
+  createReduxPosts,
+  deleteReduxPost,
+} from "../../actions/postActions";
+import fbService from "../../api/fbService";
 
 import Button from "@material-ui/core/button";
 import Post from "../../components/Post/Post";
 import ItemModal from "../../components/ItemModal/ItemModal";
+import Loader from "../../components/Loader/Loader";
 
 import "./Posts.scss";
-import { actionTypes } from "../../context/actionTypes";
-import { AppContext } from "../../context/AppContext";
 
-export default class Posts extends Component {
-  state = {
-    start: 0,
+const Posts = (props) => {
+  const [state, setState] = useState({
+    start: 5,
     limit: 4,
     hasMore: true,
     isCreateModalOpen: false,
     titleValue: "",
     bodyValue: "",
-  };
+  });
 
-  static contextType = AppContext;
+  const {
+    start,
+    limit,
+    hasMore,
+    isCreateModalOpen,
+    titleValue,
+    bodyValue,
+  } = state;
 
-  render() {
-    return (
-      <>
-        <ItemModal
-          action={this.createPost}
-          bodyValue={this.state.bodyValue}
-          titleValue={this.state.titleValue}
-          changeValue={this.changeValue}
-          isOpen={this.state.isCreateModalOpen}
-          onClose={this.toggleCreateModal}
-          buttonTitle="Create"
-        />
-        <div className="app-posts__buttons-container">
-          <Button
-            className="app-posts__buttons-container__item"
-            onClick={() => this.toggleCreateModal()}
-          >
-            Create Post
-          </Button>
-          <Button
-            className="app-posts__buttons-container__item"
-            onClick={() => this.pushPosts()}
-          >
-            Reset original posts
-          </Button>
-        </div>
-        {this.context.state.posts ? (
-          <div className="app-posts">
-            {this.context.state.posts.map((el, idx) => {
-              return (
-                <div key={idx} className="app-posts__container">
-                  <Post
-                    key={el.id}
-                    post={el}
-                    className="app-posts__post"
-                    isLink
-                    remove={() => this.deletePost(el.id)}
-                  />
-                  <span>{"--" + el.id + "--"}</span>
-                </div>
-              );
-            })}
-            {this.state.hasMore && (
-              <div className="app-posts__get-more">
-                <Button className='app-posts__get-more__button' onClick={() => this.getMore()}>Get More Posts</Button>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div>Loading</div>
-        )}
-      </>
-    );
-  }
+  const context = useContext(AppContext);
 
-  componentDidMount() {
-    if (!this.context.state.posts) {
-      fbservice
-        .getItems(this.state.start, this.state.limit, "posts")
-        .then((data) => {
-          this.context.dispatch({
-            type: actionTypes.SET_POSTS,
-            payload: { posts: data },
-          });
-        })
-        .catch((err) => {
-          console.log("Caught an error : ", err);
-        });
+  useEffect(() => {
+    if (!props.posts) {
+      props.setReduxPosts(0, limit);
     }
-  }
+  }, []);
 
-  toggleCreateModal = () => {
-    this.setState((prev) => ({
+  const toggleCreateModal = () => {
+    setState((prev) => ({
+      ...state,
       isCreateModalOpen: !prev.isCreateModalOpen,
     }));
   };
 
-  changeValue = (e) => {
-    this.setState({
-      ...this.state,
+  const changeValue = (e) => {
+    setState({
+      ...state,
       [e.target.name]: e.target.value,
     });
   };
 
-  pushPosts = () => {
-    fbservice.pushPosts();
+  const pushPosts = () => {
+    fbService.pushPosts();
   };
 
-  createPost = () => {
+  const createPost = () => {
     const newPost = {
-      title: this.state.titleValue,
-      body: this.state.bodyValue,
+      title: titleValue,
+      body: bodyValue,
       userId: 1,
     };
-    fbservice.createItem(newPost, "posts").then((data) => {
-      this.context.dispatch({
-        type: actionTypes.CREATE_POST,
-        payload: { post: data },
-      });
-      this.toggleCreateModal();
-    });
+    props.createReduxPosts(newPost);
+    toggleCreateModal();
   };
 
-  deletePost = (id) => {
-    fbservice
-      .deleteItem(id, "posts")
-      .then(() => {
-        this.setState({
-          posts: this.state.posts.filter((el) => {
-            return el.id != id;
-          }),
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const deletePost = async (id) => {
+    props.deleteReduxPost(id, start);
   };
 
-  getMore = () => {
-    const { start, limit } = this.state;
+  const getMore = () => {
     const newStart = start + limit + 1;
-    this.setState({
+    setState({
+      ...state,
       start: newStart,
     });
-    fbservice.getItems(start, start + limit, "posts").then((data) => {
-      this.context.dispatch({
-        type: actionTypes.GET_MORE_POSTS,
-        payload: { posts: data },
-      });
-      this.setState({
-        hasMore: data.length < limit ? false : true,
-      });
-    });
+    props.getMoreReduxPosts(start, limit);
   };
-}
+
+  return (
+    <>
+      <ItemModal
+        action={createPost}
+        bodyValue={bodyValue}
+        titleValue={titleValue}
+        changeValue={changeValue}
+        isOpen={isCreateModalOpen}
+        onClose={toggleCreateModal}
+        buttonTitle="Create"
+      />
+      <div className="app-posts__buttons-container">
+        {context.state.user && (
+          <Button
+            className="app-posts__button"
+            onClick={() => toggleCreateModal()}
+          >
+            Create Post
+          </Button>
+        )}
+        {/*  Reset tool button
+           
+        <Button className="app-posts__button" onClick={() => pushPosts()}>
+          Reset original posts
+        </Button> */}
+      </div>
+      {props.posts ? (
+        <div className="app-posts">
+          {props.posts.map((el, idx) => {
+            return (
+              <div key={idx} className="app-posts__container">
+                <Post
+                  key={el.id}
+                  post={el}
+                  className="app-posts__post"
+                  isLink
+                  remove={() => deletePost(el.id)}
+                />
+              </div>
+            );
+          })}
+          {hasMore && (
+            <div className="app-posts__get-more">
+              <Button className="app-posts__button" onClick={() => getMore()}>
+                Get More Posts
+              </Button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <Loader />
+      )}
+    </>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    posts: state.posts,
+  };
+};
+
+const mapDispatchToProps = {
+  setReduxPosts,
+  getMoreReduxPosts,
+  createReduxPosts,
+  deleteReduxPost,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Posts);

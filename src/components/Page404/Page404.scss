@@ -1,0 +1,14 @@
+.app-404 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  margin: 10px;
+
+  &__image {
+    background: url("../../assets/404.jpg")no-repeat center center;
+    width: 40%;
+    height: 40%;
+    border-radius: 50px;
+  }
+}

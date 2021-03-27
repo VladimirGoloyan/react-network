@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
-import storeService from "../../api/storageService";
-import fbService from "../../api/fbService";
 import { AppContext } from "../../context/AppContext";
+import storeService from "../../api/storageService";
 
 import { Button } from "@material-ui/core";
+import Loader from "../../components/Loader/Loader";
 
 import "./Profile.scss";
 
@@ -20,11 +20,24 @@ const Profile = () => {
   };
 
   return (
-    <div>
-      Profile of {context.state.user.displayName}
-      <Button onClick={logOutHandler} color="primary" variant="contained">
-        Log out
-      </Button>
+    <div className="app-profile">
+      <div className="app-profile__container">
+        {context.state.user && context.state.user.displayName ? (
+          <span>
+            Profile of
+            {" " + context.state.user.displayName ||
+              " " + context.state.user.email}
+          </span>
+        ) : (
+          <Loader />
+        )}
+        <Button
+          onClick={logOutHandler}
+          className="app-profile__container__log-out"
+        >
+          Log out
+        </Button>
+      </div>
     </div>
   );
 };
