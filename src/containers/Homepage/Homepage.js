@@ -16,7 +16,7 @@ export default class Homepage extends Component {
     let b = 0;
     let c = 0;
 
-    while (a == b || b == c || a == c) {
+    while (a === b || b === c || a === c) {
       a = Math.floor(Math.random() * 15);
       console.log(a);
       b = Math.floor(Math.random() * 15);

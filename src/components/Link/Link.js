@@ -5,7 +5,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 import "./Link.scss";
 
-const Link = ({ children, className, to }) => {
+const Link = ({ children, className='', to }) => {
   return (
     <RouterLink to={to} className={(className, "app-link")}>
       {children}
@@ -14,7 +14,7 @@ const Link = ({ children, className, to }) => {
 };
 
 Link.propTypes = {
-  className: PropTypes.string.isRequired,
+  className: PropTypes.string,
   to: PropTypes.string.isRequired
 }
 

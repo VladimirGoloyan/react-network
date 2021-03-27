@@ -66,9 +66,9 @@ export const updateReduxPost = (newPost) => (dispatch, getState) => {
 };
 
 const calcLength = (num) => {
-  const start = 0;
+  let start = 0;
   while (num > start) {
-    if (num == start) break;
+    if (num === start) break;
     start = start + 5;
   }
   return start;

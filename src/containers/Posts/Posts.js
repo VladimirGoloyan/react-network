@@ -69,7 +69,6 @@ const Posts = (props) => {
     };
     props.createReduxPosts(newPost);
     toggleCreateModal();
-    //props.history.push(`posts/${id}`)
   };
 
   const deletePost = async (id) => {
@@ -105,9 +104,11 @@ const Posts = (props) => {
             Create Post
           </Button>
         )}
+        {/*  Reset tool button
+           
         <Button className="app-posts__button" onClick={() => pushPosts()}>
           Reset original posts
-        </Button>
+        </Button> */}
       </div>
       {props.posts ? (
         <div className="app-posts">
@@ -121,7 +122,6 @@ const Posts = (props) => {
                   isLink
                   remove={() => deletePost(el.id)}
                 />
-                <span>{"--" + el.id + "--"}</span>
               </div>
             );
           })}

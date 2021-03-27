@@ -9,7 +9,7 @@ import todosMockup from "../data-mockup/todos-mockup";
 class fbService {
   constructor() {
     this.baseUrl = "https://react-project-d7762-default-rtdb.firebaseio.com";
-    if (firebase.apps.length == 0) firebase.initializeApp(firebaseConfig);
+    if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
   }
 
   pushPosts() {

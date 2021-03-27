@@ -70,11 +70,11 @@ const Signup = () => {
           );
       }
     } catch (err) {
-      if (err.message[0] == "P") {
+      if (err.message[0] === "P") {
         setErrorState({
           passwordError: err.message,
         });
-      } else if (err.message[4] == "e")
+      } else if (err.message[4] === "e")
         setErrorState({
           emailError: err.message,
         });

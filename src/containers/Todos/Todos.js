@@ -75,9 +75,9 @@ const Todos = (props) => {
   };
 
   const changeValue = (e) => {
-    if (e.target.name == "titleValue")
+    if (e.target.name === "titleValue")
       setState({ ...state, titleValue: e.target.value });
-    else if (e.target.name == "completeValue")
+    else if (e.target.name === "completeValue")
       setState({ ...state, completeValue: e.target.value });
   };
 
@@ -107,9 +107,11 @@ const Todos = (props) => {
           >
             Create ToDo
           </Button>
+          {/* Reset tool button 
+          
           <Button className="app-todos__button" onClick={() => pushTodos()}>
             Reset original todos
-          </Button>
+          </Button> */}
           <div className="app-todos__container">
             {props.todos ? (
               props.todos.map((el, idx) => {
@@ -134,7 +136,6 @@ const Todos = (props) => {
                         });
                       }}
                     />
-                    {"--" + el.id + "--"}
                   </div>
                 );
               })
