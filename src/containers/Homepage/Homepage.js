@@ -18,11 +18,8 @@ export default class Homepage extends Component {
 
     while (a === b || b === c || a === c) {
       a = Math.floor(Math.random() * 15);
-      console.log(a);
       b = Math.floor(Math.random() * 15);
-      console.log(b);
       c = Math.floor(Math.random() * 15);
-      console.log(c);
     }
     this.setState({ displayItems: [a, b, c] });
   };
@@ -39,6 +36,7 @@ export default class Homepage extends Component {
             this.state.displayItems.map((el, idx) => {
               return (
                 <Image
+                  className='app-homepage__image'
                   key={idx}
                   src={pictures[el].url}
                   alt={pictures[el].alt}
